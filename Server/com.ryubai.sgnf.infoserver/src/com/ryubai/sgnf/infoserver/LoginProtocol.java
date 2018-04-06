@@ -16,4 +16,7 @@ public class LoginProtocol {
     public static final int Login_InvalidPassword = 2;//ÃÜÂë´íÎó
      
     public static final int Login_Succeed = 10;//µÇÂ½³É¹¦
+    
+    
+    
 }

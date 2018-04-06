@@ -1,0 +1,113 @@
+
+对于该框架，玩家只有一个全局唯一值来表示：PlayerID
+至于玩家的具体信息啥的是用框架的人的事情
+那框架内没有账号密码验证过程怎么处理呢？
+在IS中，有个CountAsLoggedIn(int PlayerID,Socket PlayerSocket)函数
+调用了就算做该玩家已登录咯~
+
+
+class InternalCommand
+{
+	public static final int NULL = 0;
+	public static final int PING = 1;
+	public static final int SSINFO = 2;
+	public static final int Login;
+	public static final int Login;
+	public static final int Login;
+}
+
+struct SSInfo
+{
+	public String IP;
+	public int Port;
+}
+
+struct SocketModel
+{
+	public int Command;
+	public List<String> Message;
+}
+
+struct Room
+{
+	private List<int> Player;
+	
+	public void PlayerIn(int PID)
+	{
+		if(!Player.contains(PID))Player.add(PID);
+	}
+	public void PlayerOut(int PID)
+	{
+		if(Player.contains(PID))Player.remove(PID);
+	}
+	public bool isEmpty()
+	{
+		return Player.isEmpty();
+	}
+	public int BossPlayer()
+	{
+		if(!isEmpty())return Player[0];
+		else return -1;
+	}
+}
+
+struct RoomContainer
+{
+	private List<Room> AllRoom;
+	
+	public Room GetRoom(int BossPlayer)
+	{
+		foreach(Room room in AllRoom)
+		{
+			if(room.ID == ID)return room;
+		}
+		return null;
+	}
+	public int CreateRoom(int BossPlayerID)
+	{
+		Room nr = new Room();
+		nr.BossPlayer = BossPlayerID;
+		AllRoom.Add(nr);
+	}
+	public void DropRoom(int RoomID)
+	{
+		AllRoom.RemoveAt(RoomID);
+	}
+	
+}
+
+
+
+
+
+
+
+IS:
+Arr<SSInfo> AllSS
+Arr<Int> OnlinePlayer
+Arr<Room> ActiveRoom
+
+Net Bool Login()
+Net Room()
+
+
+
+InformSS PlayerJoin(PlayerID,RoomID)
+
+
+
+SS:
+Arr PlayerOnServer
+
+
+InformIS RoundEnd(RoomID)
+
+
+
+Clt:
+
+Bool Login()
+
+Bool JoinRoom(RoomID)
+Int CreateRoomOnBestSS()
+Int JoinRandomRoomOnBestSS()

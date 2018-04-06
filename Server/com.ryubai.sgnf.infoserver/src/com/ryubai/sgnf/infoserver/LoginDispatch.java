@@ -1,5 +1,7 @@
 package com.ryubai.sgnf.infoserver;
 
+import java.util.List;
+
 import io.netty.channel.ChannelHandlerContext;
 
 
@@ -9,8 +11,8 @@ public class LoginDispatch {
     {
         return instance;
     }
-    public User user = null;
-    public Wizard wizard = null;
+    //public User user = null;
+    //public Wizard wizard = null;
     public void dispatch(ChannelHandlerContext ctx, SocketModel message)
     {
         switch (message.getArea()) {
@@ -30,9 +32,9 @@ public class LoginDispatch {
         List<String> message = request.getMessage();
         String username = message.get(0);
         String password = message.get(1);
-        //System.out.println(username);
-        //System.out.println(password);
-        if (message.isEmpty())
+        System.out.println(username);
+        System.out.println(password);
+        /*if (message.isEmpty())
         {
             return LoginProtocol.Login_InvalidMessage;
         }else{
@@ -49,7 +51,8 @@ public class LoginDispatch {
                 return LoginProtocol.Login_InvalidUsername;
             }
         }
-         
+    */
+        return LoginProtocol.Login_Succeed;
     }
     public void LoginResponse(ChannelHandlerContext ctx,SocketModel request)
     {
@@ -70,7 +73,7 @@ public class LoginDispatch {
      * @param ctx
      */
     public void LoginUser(ChannelHandlerContext ctx,SocketModel socketModel)
-    {
+    {/*
         user = UserMySQL.getInstance().initUser(User.getUserByChannel(ctx.channel()));
         user.setWizard(WizardMySQL.getInstance().initWizard(user.getUserID()));
         SocketModel message = new SocketModel();
@@ -78,6 +81,6 @@ public class LoginDispatch {
         message.setArea(WizardProtocol.Wizard_Create_Request);
         message.setCommand(user.getWizard().getStepIndex());
         message.setMessage(null);
-        ctx.writeAndFlush(message);
+        ctx.writeAndFlush(message);*/
     }
 }
