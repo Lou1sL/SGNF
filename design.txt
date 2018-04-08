@@ -1,3 +1,185 @@
+public class SocketModel
+{
+	public int Command;
+}
+
+public class PingSocketModel extends SocketModel
+{
+	public int RandomNumber;
+}
+
+public class SSINFOSocketModel extends SocketModel
+{
+	public List<SSBasicInfo> SSBInfo;
+}
+
+public class SSSocketModel extends SocketModel
+{
+	public int CurrentTick;
+}
+
+
+
+//SocketModel
+public class UserISSocketModel extends SocketModel{}
+public class UserSSSocketModel extends SSSocketModel{}
+
+
+
+public class SSBasicInfo
+{
+	public String Tag;
+	public String IP;
+	public int Port;
+}
+
+public class SSInfo extends SSBasicInfo
+{
+	public String Code;
+	
+	SSinfo(String tag,String ip,int port,String code)
+	{
+		super.Tag = tag;
+		super.IP = ip;
+		super.Port = port;
+		Code = code;
+	}
+}
+
+
+public enum InternalCommand
+{
+	//Common
+	NULL = 0xF000; //当服务器收到该消息时抛弃掉
+	PING = 0xF001; //客户端发来一个随机数，服务器接受此指令后返回该随机数
+	
+	//Clt-IS
+	SSINFO = 0xF002;//客户端从IS获取全部SS列
+}
+
+public class ISCallHandler extends ChannelInboundHandlerAdapter
+{
+	@Override
+	//当客户端发送数据到服务器会触发此函数
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
+    {
+		Object response = dealMsg(msg);
+		if(response!=null)ctx.writeAndFlush(response);
+    }
+	@Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception
+    {
+        cause.printStackTrace();
+    }
+	
+	public Object dealMsg(Object msg){return null;}
+}
+
+
+//使用方法----------------------------------------------------------------------
+public enum Command
+{
+	LOGIN,
+	LOGINFAILED,
+	LOGINSUCCEED,
+	UPDATEPLAER,
+}
+
+public class PlayerPosition2D
+{
+	public int PlayerID;
+	public int X;public int Y;
+}
+
+public class ISModel extends UserISSocketModel
+{
+	public String Name;
+	public String Password;
+}
+
+public class SSModel extends UserSSSocketModel
+{
+	public List<PlayerPosition2D> ppl;
+}
+
+//IS---------------------------
+InfoServer is = new InfoServer();
+
+SSInfo ssinfo[] = 
+{
+	new SSInfo("ss0","localhost",9876,"biubiubiu");
+};
+is.setSSInfo(ssinfo);
+
+is.setCallHandler(new ISCallHandler(){
+	@Override
+	public Object dealMsg(Object msg)
+	{
+		ISModel message = (ISModel)msg;
+		ISModel response = new ISModel();
+		
+		if(message.Command == Command.LOGIN)
+		{
+			if(message.Name.equals("emmm") && message.Password.equals("biabiabia"))response.Command = Command.LOGINSUCCEED;
+			else response.Command = Command.LOGINFAILED;
+		}else return null;
+		
+	}
+});
+
+is.setMaxConn(1024);
+is.setPort(9999);
+is.start();
+
+//打印连接数量，CPU负载，内存占用，硬盘I/O
+is.getSSStatus();
+
+is.shut();
+
+//SS---------------------------
+ScenarioServer ss = new ScenarioServer();
+ss.setTick(60);
+ss.setCode(ssinfo[0].Code);
+
+ss.setFrameUpdater(new ChannelInboundHandlerAdapter(){});
+ss.setMaxConn(1024);
+ss.setPort(ssinfo[0].Port);
+ss.start();
+
+ss.shut();
+
+
+//Clt
+Client.SetIS("localhost",9999);
+Client.Start();
+Client.SendMsg();
+Client.GetRoomList();
+Client.CreateRoom();
+Client.JoinRoom(1000);
+Client.ExitRoom();
+
+Client.Shut();
+
+
+//----------------------------------------------------------------------
+
+流程：
+
+
+Clt发送登录凭据到IS，由用户判断正确性并调用CountAsLoggedIn(int PlayerID,Socket PlayerSocket)保持连接
+
+
+
+用户定义的Clt部分：
+房间的战局信息数据包格式
+用户定义的IS部分：
+账号密码登陆验证判断逻辑
+房间的战局信息数据包格式
+用户定义的SS部分：
+玩家场景同步的数据包格式及逻辑
+
+
+
 
 对于该框架，玩家只有一个全局唯一值来表示：PlayerID
 至于玩家的具体信息啥的是用框架的人的事情
@@ -6,29 +188,13 @@
 调用了就算做该玩家已登录咯~
 
 
-class InternalCommand
-{
-	public static final int NULL = 0;
-	public static final int PING = 1;
-	public static final int SSINFO = 2;
-	public static final int Login;
-	public static final int Login;
-	public static final int Login;
-}
 
-struct SSInfo
-{
-	public String IP;
-	public int Port;
-}
 
-struct SocketModel
-{
-	public int Command;
-	public List<String> Message;
-}
 
-struct Room
+
+
+
+class Room
 {
 	private List<int> Player;
 	
@@ -51,7 +217,7 @@ struct Room
 	}
 }
 
-struct RoomContainer
+class RoomContainer
 {
 	private List<Room> AllRoom;
 	
@@ -83,7 +249,7 @@ struct RoomContainer
 
 
 IS:
-Arr<SSInfo> AllSS
+Arr<ServerSetting> AllSS
 Arr<Int> OnlinePlayer
 Arr<Room> ActiveRoom
 

@@ -33,10 +33,6 @@ public class Server {
                                 .childHandler(new ChannelInitializer<SocketChannel>() {
                                     @Override
                                     protected void initChannel(SocketChannel ch) throws Exception {
-                                        ch.pipeline().addLast(new ServerHandler());
-                                        
-                                        
-                                        
                                         ch.pipeline().addLast(new LengthDecoder(1024,0,4,0,4));
                                         ch.pipeline().addLast(new MessageDecoder());
                                         ch.pipeline().addLast(new MessageEncoder());
