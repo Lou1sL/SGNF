@@ -21,29 +21,14 @@ public class Server {
             .channel(NioServerSocketChannel.class)
             .option(ChannelOption.SO_BACKLOG, 1024)//最大客户端连接数为1024
             .childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
+            	@Override
                 protected void initChannel(SocketChannel ch) throws Exception {
-
-                	//业务逻辑
-                	ch.pipeline().addLast(new ServerHandler());
-                    ServerBootstrap b = new ServerBootstrap();//server启动管理配置
-                                b.group(bossGroup, workGroup)
-                                .channel(NioServerSocketChannel.class)
-                                .option(ChannelOption.SO_BACKLOG, 1024)//最大客户端连接数为1024
-                                .childHandler(new ChannelInitializer<SocketChannel>() {
-                                    @Override
-                                    protected void initChannel(SocketChannel ch) throws Exception {
-                                        ch.pipeline().addLast(new LengthDecoder(1024,0,4,0,4));
-                                        ch.pipeline().addLast(new MessageDecoder());
-                                        ch.pipeline().addLast(new MessageEncoder());
-                                        ch.pipeline().addLast(new ServerHandler());
-                                        
-                                        
-                                    }
-                                });
-                                
-                }
-            });
+            		ch.pipeline().addLast(new LengthDecoder(1024,0,4,0,4));
+            		ch.pipeline().addLast(new MessageDecoder());
+            		ch.pipeline().addLast(new MessageEncoder());
+            		ch.pipeline().addLast(new ISCallHandler());
+            		}
+            	});
             ChannelFuture f = b.bind(port).sync();
             if (f.isSuccess())
             {
@@ -61,7 +46,7 @@ public class Server {
 	
     public static void main(String[] args) throws Exception
     {
-        int port = 8086;
+        int port = 9999;
         new Server().bind(port);
     }
 }  

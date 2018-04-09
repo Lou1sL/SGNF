@@ -6,12 +6,12 @@ using UnityStandardUtils;
 
 namespace SGNFClient
 {
-    public delegate void Callback_NetMessage_Handle(byte[] _data);
+    public delegate void Callback_NetMessage_Handle(ISSocketModel data);
 
-    public class MessageCenter : SingletonMonoBehaviour<MessageCenter>
+    public class ISMessageCenter : SingletonMonoBehaviour<ISMessageCenter>
     {
         private Dictionary<int, Callback_NetMessage_Handle> _netMessage_EventList = new Dictionary<int, Callback_NetMessage_Handle>();
-        internal Queue<SocketModel> _netMessageDataQueue = new Queue<SocketModel>();
+        internal Queue<ISSocketModel> _netMessageDataQueue = new Queue<ISSocketModel>();
 
         //添加网络事件观察者
         internal void addObserver(int protocalType, Callback_NetMessage_Handle callback)
@@ -47,10 +47,10 @@ namespace SGNFClient
             {
                 lock (_netMessageDataQueue)
                 {
-                    SocketModel tmpNetMessageData = _netMessageDataQueue.Dequeue();
-                    if (_netMessage_EventList.ContainsKey(tmpNetMessageData._protocalType))
+                    ISSocketModel tmpNetMessageData = _netMessageDataQueue.Dequeue();
+                    if (_netMessage_EventList.ContainsKey(tmpNetMessageData.Command))
                     {
-                        _netMessage_EventList[tmpNetMessageData._protocalType](tmpNetMessageData._data);
+                        _netMessage_EventList[tmpNetMessageData.Command](tmpNetMessageData);
                     }
                 }
             }

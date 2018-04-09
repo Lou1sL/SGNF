@@ -5,132 +5,79 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using UnityEngine;
+using SGNFClient;
 
 public class MainClient : MonoBehaviour
 {
-    private const string HOST = "127.0.0.1";
-    private const int PORT = 8080;
-    public static MainClient instance;
-    public static TcpClient client;
 
-
-
-    private byte[] recieveData;
-    private int len;
-    private bool isHead;
-
-    void Awake()
+    /// <summary>
+    /// 网络配置
+    /// </summary>
+    public class GameConst
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        public const string IP = "127.0.0.1";
+        public const int Port = 9999;
     }
-    void Start()
+
+
+    /// <summary>
+    /// 网络事件ID；
+    /// 在服务器，它的长度为UInt16，
+    /// 因此数值上不能大于0xFFFF。
+    /// 同时，0xF000-0xFFFF是保留报文格式，仅内部使用。
+    /// 因此，可用的事件ID范围为：
+    /// 0x0000-0xEFFF
+    /// </summary>
+    public enum ProtocalCommand
     {
-        if (client == null)
-        {
-            Connect();
-        }
-        isHead = true;
-        recieveData = new byte[800];
-        client.GetStream().BeginRead(recieveData, 0, 800, ReceiveMsg, client.GetStream());//在start里面开始异步接收消息
+        test = 1234,
+        player_position = 0x3000,
     }
-    void Update()
+    
+    private void Start()
     {
+        //绑定数据包发送后的服务器回调处理函数
+        Client.AddCallBackObserver(ProtocalCommand.test, CallBack_Test);
+        Client.Connect(GameConst.IP, GameConst.Port);
+    }
+
+    private void OnDisable()
+    {
+        //解绑
+        Client.RemoveCallBackObserver(ProtocalCommand.test, CallBack_Test);
     }
     void OnApplicationQuit()
     {
-        client.Close();
+        
+        Client.Disconnect();
     }
-    public void Connect()
-    {
-        client = new TcpClient();
-        try
-        {
-            client.Connect(HOST, PORT);
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-            client.Close();
-        }
-    }
+    
 
 
-    public void SendMsg(SocketModel socketModel)
+    /// <summary>
+    /// 发送数据包
+    /// </summary>
+    public void SendMsg2IS()
     {
-        byte[] msg = Serial(socketModel);
-        //消息体结构：消息体长度+消息体
-        byte[] data = new byte[4 + msg.Length];
-        IntToBytes(msg.Length).CopyTo(data, 0);
-        msg.CopyTo(data, 4);
-        client.GetStream().Write(data, 0, data.Length);
-        //print("send");
+        ISSocketModel model = new ISSocketModel()
+        {
+            Command = (int)ProtocalCommand.test,
+            Message = new List<string>()
+            {
+                "HAHAHAHAHAAHAAAAAHHH!",
+            }
+        };
+        Debug.Log("Message Sent!!");
+        Client.SendISMsg(model);
     }
 
-    public void ReceiveMsg(IAsyncResult ar)//异步接收消息
+    /// <summary>
+    /// 发送后的回调
+    /// </summary>
+    /// <param name="_msgData"></param>
+    private void CallBack_Test(ISSocketModel _msgData)
     {
-        NetworkStream stream = (NetworkStream)ar.AsyncState;
-        stream.EndRead(ar);
-        //读取消息体的长度
-        if (isHead)
-        {
-            byte[] lenByte = new byte[4];
-            System.Array.Copy(recieveData, lenByte, 4);
-            len = BytesToInt(lenByte, 0);
-            isHead = false;
-        }
-        //读取消息体内容
-        if (!isHead)
-        {
-            byte[] msgByte = new byte[len];
-            System.Array.ConstrainedCopy(recieveData, 4, msgByte, 0, len);
-            isHead = true;
-            len = 0;
-            SocketModel message = DeSerial(msgByte);
-        }
-        stream.BeginRead(recieveData, 0, 800, ReceiveMsg, stream);
-    }
-    private byte[] Serial(SocketModel socketModel)//将SocketModel转化成字节数组
-    {
-        using (MemoryStream ms = new MemoryStream())
-        {
-            Serializer.Serialize(ms, socketModel);
-            byte[] data = new byte[ms.Length];
-            ms.Position = 0;
-            ms.Read(data, 0, data.Length);
-            return data;
-        }
-    }
-    private SocketModel DeSerial(byte[] msg)//将字节数组转化成我们的消息类型SocketModel
-    {
-        using (MemoryStream ms = new MemoryStream())
-        {
-            ms.Write(msg, 0, msg.Length);
-            ms.Position = 0;
-            SocketModel socketModel = Serializer.Deserialize<SocketModel>(ms);
-            return socketModel;
-        }
-    }
-    public static int BytesToInt(byte[] data, int offset)
-    {
-        int num = 0;
-        for (int i = offset; i < offset + 4; i++)
-        {
-            num <<= 8;
-            num |= (data[i] & 0xff);
-        }
-        return num;
-    }
-    public static byte[] IntToBytes(int num)
-    {
-        byte[] bytes = new byte[4];
-        for (int i = 0; i < 4; i++)
-        {
-            bytes[i] = (byte)(num >> (24 - i * 8));
-        }
-        return bytes;
+        Debug.Log(_msgData.Command);
+        Debug.Log(_msgData.Message[0]);
     }
 }

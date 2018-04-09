@@ -1,39 +1,37 @@
-public class SocketModel
+//Server
+private class PingSocketModel
 {
 	public int Command;
-}
-
-public class PingSocketModel extends SocketModel
-{
 	public int RandomNumber;
 }
 
-public class SSINFOSocketModel extends SocketModel
-{
-	public List<SSBasicInfo> SSBInfo;
-}
-
-public class SSSocketModel extends SocketModel
-{
-	public int CurrentTick;
-}
-
-
-
-//SocketModel
-public class UserISSocketModel extends SocketModel{}
-public class UserSSSocketModel extends SSSocketModel{}
-
-
-
-public class SSBasicInfo
+private class SSBasicInfo
 {
 	public String Tag;
 	public String IP;
 	public int Port;
 }
+private class SSINFOSocketModel
+{
+	public int Command;
+	public List<SSBasicInfo> SSBInfo;
+}
 
-public class SSInfo extends SSBasicInfo
+
+//SocketModel
+public class UserISSocketModel
+{
+	public int Command;
+}
+public class UserSSSocketModel
+{
+	public int Command;
+	public int CurrentTick;
+}
+
+
+
+private class SSInfo extends SSBasicInfo
 {
 	public String Code;
 	
@@ -74,6 +72,11 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter
 	
 	public Object dealMsg(Object msg){return null;}
 }
+
+
+
+
+
 
 
 //使用方法----------------------------------------------------------------------
@@ -152,11 +155,15 @@ ss.shut();
 //Clt
 Client.SetIS("localhost",9999);
 Client.Start();
+
 Client.SendMsg();
-Client.GetRoomList();
-Client.CreateRoom();
-Client.JoinRoom(1000);
-Client.ExitRoom();
+
+Client.Room.GetList();
+Client.Room.Create();
+Client.Room.Join(1000);
+Client.Room.Prepared();
+
+Client.Room.Exit();
 
 Client.Shut();
 

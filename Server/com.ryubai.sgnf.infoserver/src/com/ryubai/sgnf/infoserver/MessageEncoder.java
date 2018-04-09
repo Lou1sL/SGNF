@@ -10,15 +10,14 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-public class MessageEncoder extends MessageToByteEncoder<SocketModel>{
-    private Schema<SocketModel> schema = RuntimeSchema.getSchema(SocketModel.class);
+public class MessageEncoder extends MessageToByteEncoder<ISSocketModel>{
+    private Schema<ISSocketModel> schema = RuntimeSchema.getSchema(ISSocketModel.class);
     @Override
-    protected void encode(ChannelHandlerContext ctx, SocketModel message,
-            ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, ISSocketModel message,ByteBuf out) throws Exception {
         //System.out.println("encode");
         LinkedBuffer buffer = LinkedBuffer.allocate(1024);
         byte[] data = ProtobufIOUtil.toByteArray(message, schema, buffer);
-        ByteBuf buf = Unpooled.copiedBuffer(CoderUtil.intToBytes(data.length),data);//在写消息之前需要把消息的长度添加到投4个字节
+        ByteBuf buf = Unpooled.copiedBuffer(SocketUtil.intToBytes(data.length),data);//在写消息之前需要把消息的长度添加到投4个字节
         out.writeBytes(buf);
     }
 }
