@@ -18,10 +18,10 @@ namespace SGNFClient
         private Thread receiveThread = null;
 
 
-
         byte[] _tmpReceiveBuff = new byte[4096];
-        private SocketUtil.DataBuffer _databuffer = new SocketUtil.DataBuffer();
-        private byte[] _socketData = new byte[0];
+        SocketUtil.DataBuffer _databuffer = new SocketUtil.DataBuffer();
+        byte[] _socketData = new byte[0];
+
 
 
 
@@ -55,6 +55,7 @@ namespace SGNFClient
                 {
                     //失败
                     Close();
+                    SGNFDebug.ExceptionCaught(_e);
                 }
             }
         }
@@ -69,7 +70,6 @@ namespace SGNFClient
             {
                 Socket client = (Socket)iar.AsyncState;
                 client.EndConnect(iar);
-
                 receiveThread = new Thread(new ThreadStart(_onReceiveSocket));
                 receiveThread.IsBackground = true;
                 receiveThread.Start();
@@ -80,6 +80,7 @@ namespace SGNFClient
             catch (Exception _e)
             {
                 Close();
+                SGNFDebug.ExceptionCaught(_e);
             }
         }
         /// <summary>
@@ -101,18 +102,22 @@ namespace SGNFClient
                     {
                         //将收到的数据添加到缓存器中
                         _databuffer.AddBuffer(_tmpReceiveBuff, receiveLength);
+                        SGNFDebug.HEXLog("rcv",_tmpReceiveBuff, receiveLength);
                         //取出一条完整数据
                         while (_databuffer.GetData(out _socketData))
                         {
                             ISSocketModel DeData = SocketUtil.ISDeSerial(_socketData);
-
 
                             //如果数据属于内部协议
                             if (Enum.IsDefined(typeof(SocketUtil.InternalCommand), DeData.Command))
                             {
                                 if (DeData.Command == (int)SocketUtil.InternalCommand.NULL)
                                 {
-                                    Console.WriteLine("Got NULL From Server..");
+                                    SGNFDebug.Log("Got NULL From Server..");
+                                }
+                                if (DeData.Command == (int)SocketUtil.InternalCommand.PING)
+                                {
+                                    //Client.RcvPingStr = DeData.Message[0];
                                 }
                             }
                             else
@@ -131,6 +136,7 @@ namespace SGNFClient
                     clientSocket.Disconnect(true);
                     clientSocket.Shutdown(SocketShutdown.Both);
                     clientSocket.Close();
+                    SGNFDebug.ExceptionCaught(e);
                     break;
                 }
             }
@@ -152,7 +158,7 @@ namespace SGNFClient
             SocketUtil.IntToBytes(_data.Length).CopyTo(data, 0);
             _data.CopyTo(data, 4);
 
-
+            SGNFDebug.HEXLog("send",data,data.Length);
             clientSocket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(_onSendMsg), clientSocket);
         }
 
@@ -169,7 +175,7 @@ namespace SGNFClient
             }
             catch (Exception e)
             {
-                Console.WriteLine("send msg exception:" + e.StackTrace);
+                SGNFDebug.ExceptionCaught(e);
             }
         }
 

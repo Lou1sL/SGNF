@@ -1,109 +1,8 @@
-//Server
-private class PingSocketModel
-{
-	public int Command;
-	public int RandomNumber;
-}
-
-private class SSBasicInfo
-{
-	public String Tag;
-	public String IP;
-	public int Port;
-}
-private class SSINFOSocketModel
-{
-	public int Command;
-	public List<SSBasicInfo> SSBInfo;
-}
-
-
-//SocketModel
-public class UserISSocketModel
-{
-	public int Command;
-}
-public class UserSSSocketModel
-{
-	public int Command;
-	public int CurrentTick;
-}
-
-
-
-private class SSInfo extends SSBasicInfo
-{
-	public String Code;
-	
-	SSinfo(String tag,String ip,int port,String code)
-	{
-		super.Tag = tag;
-		super.IP = ip;
-		super.Port = port;
-		Code = code;
-	}
-}
-
-
-public enum InternalCommand
-{
-	//Common
-	NULL = 0xF000; //当服务器收到该消息时抛弃掉
-	PING = 0xF001; //客户端发来一个随机数，服务器接受此指令后返回该随机数
-	
-	//Clt-IS
-	SSINFO = 0xF002;//客户端从IS获取全部SS列
-}
-
-public class ISCallHandler extends ChannelInboundHandlerAdapter
-{
-	@Override
-	//当客户端发送数据到服务器会触发此函数
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
-    {
-		Object response = dealMsg(msg);
-		if(response!=null)ctx.writeAndFlush(response);
-    }
-	@Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception
-    {
-        cause.printStackTrace();
-    }
-	
-	public Object dealMsg(Object msg){return null;}
-}
-
-
-
 
 
 
 
 //使用方法----------------------------------------------------------------------
-public enum Command
-{
-	LOGIN,
-	LOGINFAILED,
-	LOGINSUCCEED,
-	UPDATEPLAER,
-}
-
-public class PlayerPosition2D
-{
-	public int PlayerID;
-	public int X;public int Y;
-}
-
-public class ISModel extends UserISSocketModel
-{
-	public String Name;
-	public String Password;
-}
-
-public class SSModel extends UserSSSocketModel
-{
-	public List<PlayerPosition2D> ppl;
-}
 
 //IS---------------------------
 InfoServer is = new InfoServer();
@@ -153,19 +52,12 @@ ss.shut();
 
 
 //Clt
-Client.SetIS("localhost",9999);
-Client.Start();
-
-Client.SendMsg();
-
 Client.Room.GetList();
 Client.Room.Create();
 Client.Room.Join(1000);
 Client.Room.Prepared();
 
 Client.Room.Exit();
-
-Client.Shut();
 
 
 //----------------------------------------------------------------------

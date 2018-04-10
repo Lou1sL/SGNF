@@ -50,11 +50,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientPing.cs" />
+    <Compile Include="SGNFDebug.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="ISMessageCenter.cs" />
+    <Compile Include="IS\ISMessageCenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ISSocketManager.cs" />
+    <Compile Include="IS\ISSocketManager.cs" />
     <Compile Include="SocketModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SS\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

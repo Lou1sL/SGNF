@@ -1,22 +1,13 @@
-﻿using ProtoBuf;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using UnityEngine;
-using UnityStandardUtils;
-
-namespace SGNFClient
+﻿namespace SGNFClient
 {
-    public static class Client
+    public static partial class Client
     {
         public static bool IsConnected => ISSocketManager.Instance.IsConnceted;
-        
+        internal static string ip;
 
         public static void Connect(string IP, int Port)
         {
+            ip = IP;
             ISSocketManager.Instance.Connect(IP, Port);
         }
         public static void Disconnect()
@@ -35,7 +26,7 @@ namespace SGNFClient
             byte[] rawData = SocketUtil.ISSerial(data);
             ISSocketManager.Instance.SendMsgBase(rawData);
         }
-
+        
         public static void AddCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
         {
             CheckEnum<T>();

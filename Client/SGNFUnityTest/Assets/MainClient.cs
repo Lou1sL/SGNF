@@ -6,16 +6,19 @@ using System.IO;
 using System.Net.Sockets;
 using UnityEngine;
 using SGNFClient;
+using UnityEngine.UI;
 
 public class MainClient : MonoBehaviour
 {
+    public Text PingText;
+
 
     /// <summary>
     /// 网络配置
     /// </summary>
     public class GameConst
     {
-        public const string IP = "127.0.0.1";
+        public const string IP = "192.168.1.102";
         public const int Port = 9999;
     }
 
@@ -67,7 +70,6 @@ public class MainClient : MonoBehaviour
                 "HAHAHAHAHAAHAAAAAHHH!",
             }
         };
-        Debug.Log("Message Sent!!");
         Client.SendISMsg(model);
     }
 
@@ -79,5 +81,10 @@ public class MainClient : MonoBehaviour
     {
         Debug.Log(_msgData.Command);
         Debug.Log(_msgData.Message[0]);
+    }
+    
+    private void Update()
+    {
+        PingText.text = Client.Ping().ToString();
     }
 }

@@ -20,9 +20,16 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	// 当客户端发送数据到服务器会触发此函数
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		ISSocketModel response = dealMsg((ISSocketModel)msg);
-		if (response != null)
-			ctx.writeAndFlush(response);
+		
+		ISSocketModel message = (ISSocketModel)msg;
+		if(message.command == SocketUtil.internalCommand.PING.val())
+		{
+			ctx.writeAndFlush(message);
+		}else
+		{
+			ISSocketModel response = dealMsg(message);
+			if (response != null)ctx.writeAndFlush(response);
+		}
 	}
 
 	@Override

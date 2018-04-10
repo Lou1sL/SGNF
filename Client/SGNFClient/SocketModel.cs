@@ -25,12 +25,24 @@ namespace SGNFClient
         [ProtoMember(2, IsRequired = true)]
         public int CurrentTick;
         [ProtoMember(3, IsRequired = false)]
-        public List<VecObj> Vector2Object;
+        public List<VecObj> VectorObject;
 
     }
 
     [ProtoContract]
-    public struct VecObj
+    public class VecObj
+    {
+        [ProtoMember(1, IsRequired = true)]
+        public string Tag;
+        [ProtoMember(2, IsRequired = true)]
+        public Position position;
+        [ProtoMember(3, IsRequired = true)]
+        public Rotation rotation;
+        [ProtoMember(4, IsRequired = false)]
+        public Scale scale;
+    }
+    [ProtoContract]
+    public class Position
     {
         [ProtoMember(1, IsRequired = true)]
         public float X;
@@ -38,24 +50,29 @@ namespace SGNFClient
         public float Y;
         [ProtoMember(3, IsRequired = false)]
         public float Z;
-        [ProtoMember(4, IsRequired = false)]
-        public float RotX;
-        [ProtoMember(5, IsRequired = false)]
-        public float RotY;
-        [ProtoMember(6, IsRequired = true)]
-        public float RotZ;
-        [ProtoMember(7, IsRequired = false)]
-        public float ScaleX;
-        [ProtoMember(8, IsRequired = false)]
-        public float ScaleY;
-        [ProtoMember(9, IsRequired = false)]
-        public float ScaleZ;
-
-        [ProtoMember(10, IsRequired = true)]
-        public string Tag;
-        
     }
-    
+    [ProtoContract]
+    public class Rotation
+    {
+        [ProtoMember(1, IsRequired = true)]
+        public float RotZ;
+        [ProtoMember(2, IsRequired = false)]
+        public float RotX;
+        [ProtoMember(3, IsRequired = false)]
+        public float RotY;
+    }
+    [ProtoContract]
+    public class Scale
+    {
+        [ProtoMember(1, IsRequired = false)]
+        public float ScaleX;
+        [ProtoMember(2, IsRequired = false)]
+        public float ScaleY;
+        [ProtoMember(3, IsRequired = false)]
+        public float ScaleZ;
+    }
+
+
     public static class SocketUtil
     {
         internal enum InternalCommand
@@ -159,18 +176,10 @@ namespace SGNFClient
             /// <summary>
             /// 构造函数
             /// </summary>
-            /// <param name="_minBuffLen">最小缓冲区大小</param>
-            public DataBuffer(int _minBuffLen = 1024)
+            public DataBuffer()
             {
-                if (_minBuffLen <= 0)
-                {
-                    this._minBuffLen = 1024;
-                }
-                else
-                {
-                    this._minBuffLen = _minBuffLen;
-                }
-                _buff = new byte[this._minBuffLen];
+                _minBuffLen = 1024;
+                _buff = new byte[1024];
             }
 
             /// <summary>
@@ -193,6 +202,8 @@ namespace SGNFClient
                     Array.Copy(_data, 0, _buff, _curBuffPosition, _dataLen);
                 }
                 _curBuffPosition += _dataLen;//修改当前数据标记
+
+                SGNFDebug.HEXLog("buffer", _buff, _buff.Length);
             }
 
             /// <summary>
@@ -204,9 +215,10 @@ namespace SGNFClient
                 {
                     byte[] lenByte = new byte[4];
                     Array.Copy(_buff, lenByte, 4);
-                    _buffLength = BytesToInt(lenByte, 0);
-
-                    _dataLength = _buffLength;// - Constant.HEAD_DATA_LEN;
+                    Array.Reverse(lenByte);
+                    
+                    _dataLength = BytesToInt(lenByte, 0);
+                    _buffLength = _dataLength + 4;
                 }
             }
 

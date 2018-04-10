@@ -9,7 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;   
 import io.netty.channel.socket.nio.NioServerSocketChannel;  
   
-public class Server {
+public class InfoServer {
 	
 	public void bind(int port) throws Exception
     {
@@ -47,6 +47,6 @@ public class Server {
     public static void main(String[] args) throws Exception
     {
         int port = 9999;
-        new Server().bind(port);
+        new InfoServer().bind(port);
     }
 }  
