@@ -1,4 +1,4 @@
-package com.ryubai.sgnf.infoserver;
+package com.ryubai.sgnf.scenarioserver;
 
 public class SGNFOUT {
 
