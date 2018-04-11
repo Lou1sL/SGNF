@@ -50,7 +50,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientPing.cs" />
     <Compile Include="SGNFDebug.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="IS\ISMessageCenter.cs" />

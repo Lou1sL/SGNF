@@ -1,61 +1,39 @@
-﻿using ProtoBuf;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Sockets;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using SGNFClient;
 using UnityEngine.UI;
 
 public class MainClient : MonoBehaviour
 {
-    public Text PingText;
-
-
-    /// <summary>
-    /// 网络配置
-    /// </summary>
-    public class GameConst
-    {
-        public const string IP = "192.168.1.102";
-        public const int Port = 9999;
-    }
-
+    public InputField inputUserName;
+    public InputField inputPass;
+    public Text result;
 
     /// <summary>
-    /// 网络事件ID；
-    /// 在服务器，它的长度为UInt16，
-    /// 因此数值上不能大于0xFFFF。
-    /// 同时，0xF000-0xFFFF是保留报文格式，仅内部使用。
-    /// 因此，可用的事件ID范围为：
-    /// 0x0000-0xEFFF
+    /// 0xF000-0xFFFF是保留报文格式，仅内部使用。
     /// </summary>
     public enum ProtocalCommand
     {
-        test = 1234,
-        player_position = 0x3000,
+        TEST_LOGIN = 0x1000,
     }
     
     private void Start()
     {
         //绑定数据包发送后的服务器回调处理函数
-        Client.AddCallBackObserver(ProtocalCommand.test, CallBack_Test);
-        Client.Connect(GameConst.IP, GameConst.Port);
+        Client.AddCallBackObserver(ProtocalCommand.TEST_LOGIN, CallBack_Test);
+        Client.Connect("192.168.1.102", 9999);
     }
 
     private void OnDisable()
     {
         //解绑
-        Client.RemoveCallBackObserver(ProtocalCommand.test, CallBack_Test);
+        Client.RemoveCallBackObserver(ProtocalCommand.TEST_LOGIN, CallBack_Test);
     }
     void OnApplicationQuit()
     {
         
         Client.Disconnect();
     }
-    
-
 
     /// <summary>
     /// 发送数据包
@@ -64,10 +42,11 @@ public class MainClient : MonoBehaviour
     {
         ISSocketModel model = new ISSocketModel()
         {
-            Command = (int)ProtocalCommand.test,
+            Command = (int)ProtocalCommand.TEST_LOGIN,
             Message = new List<string>()
             {
-                "HAHAHAHAHAAHAAAAAHHH!",
+                inputUserName.text,
+                inputPass.text,
             }
         };
         Client.SendISMsg(model);
@@ -79,12 +58,7 @@ public class MainClient : MonoBehaviour
     /// <param name="_msgData"></param>
     private void CallBack_Test(ISSocketModel _msgData)
     {
-        Debug.Log(_msgData.Command);
-        Debug.Log(_msgData.Message[0]);
+        result.text = _msgData.Message[0];
     }
     
-    private void Update()
-    {
-        PingText.text = Client.Ping().ToString();
-    }
 }
