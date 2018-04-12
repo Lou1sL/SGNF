@@ -35,6 +35,8 @@ public class MainClient : MonoBehaviour
         Client.Disconnect();
     }
 
+    private System.DateTime sendT;
+
     /// <summary>
     /// 发送数据包
     /// </summary>
@@ -50,6 +52,7 @@ public class MainClient : MonoBehaviour
             }
         };
         Client.SendISMsg(model);
+        sendT = System.DateTime.Now;
     }
 
     /// <summary>
@@ -59,6 +62,7 @@ public class MainClient : MonoBehaviour
     private void CallBack_Test(ISSocketModel _msgData)
     {
         result.text = _msgData.Message[0];
+        Debug.Log("PING: "+(System.DateTime.Now - sendT).Milliseconds);
     }
     
 }

@@ -75,6 +75,17 @@ namespace SGNFClient
 
     public static class SocketUtil
     {
+        public struct SSInfo
+        {
+            public string Tag;
+            public string IP;
+            public int Port;
+            public override string ToString()
+            {
+                return "TAG: " + Tag + " IP: " + IP + " PORT: " + Port;
+            }
+        }
+
         internal enum InternalCommand
         {
             //Common
@@ -203,7 +214,7 @@ namespace SGNFClient
                 }
                 _curBuffPosition += _dataLen;//修改当前数据标记
 
-                SGNFDebug.HEXLog("buffer", _buff, _buff.Length);
+                SGNFDebug.HEXLog("current buffer", _buff, _buff.Length);
             }
 
             /// <summary>

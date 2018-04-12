@@ -74,8 +74,13 @@ namespace SGNFClient
                 receiveThread.IsBackground = true;
                 receiveThread.Start();
                 _isConnected = true;
-                Console.WriteLine("Connection Established!");
-                
+
+                SGNFDebug.Log("InfoServer connected!");
+                SGNFDebug.Log("Requesting ScenarioServer list...");
+                Client.SendISMsg(new ISSocketModel()
+                {
+                    Command = (int)SocketUtil.InternalCommand.SSINFO,
+                });
             }
             catch (Exception _e)
             {
@@ -113,11 +118,28 @@ namespace SGNFClient
                             {
                                 if (DeData.Command == (int)SocketUtil.InternalCommand.NULL)
                                 {
-                                    SGNFDebug.Log("Got NULL From Server..");
+                                    SGNFDebug.Log("Got NULL from server");
                                 }
                                 if (DeData.Command == (int)SocketUtil.InternalCommand.PING)
                                 {
                                     //Client.RcvPingStr = DeData.Message[0];
+                                }
+                                if (DeData.Command == (int)SocketUtil.InternalCommand.SSINFO)
+                                {
+                                    int num = Convert.ToInt32(DeData.Message[0]);
+                                    if (num > 0)
+                                    {
+                                        for(int i = 0; i < num; i++)
+                                        {
+                                            Client.allSSInfo.Add(new SocketUtil.SSInfo()
+                                            {
+                                                Tag = DeData.Message[i * 3 + 1],
+                                                IP = DeData.Message[i * 3 + 2],
+                                                Port = Convert.ToInt32(DeData.Message[i * 3 + 3]),
+                                            });
+                                        }
+                                    }
+                                    SGNFDebug.ListLog("Got " + num + " row of SS from server",Client.allSSInfo);
                                 }
                             }
                             else

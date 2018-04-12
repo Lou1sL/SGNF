@@ -26,6 +26,22 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 		if(message.command == SocketUtil.internalCommand.PING.val())
 		{
 			ctx.writeAndFlush(message);
+		}else if(message.command == SocketUtil.internalCommand.SSINFO.val())
+		{
+			int sz = InfoServer.ssinfoList.size();
+			ISSocketModel response = new ISSocketModel();
+			response.command = SocketUtil.internalCommand.SSINFO.val();
+			response.message.add(sz + "");
+			
+			if (sz > 0) {
+				for (int i = 0; i < sz; i++) {
+					response.message.add(InfoServer.ssinfoList.get(i).Tag);
+					response.message.add(InfoServer.ssinfoList.get(i).IP);
+					response.message.add(InfoServer.ssinfoList.get(i).Port+"");
+				}
+			}
+			ctx.writeAndFlush(response);
+			
 		}else
 		{
 			ISSocketModel response = dealMsg(message);

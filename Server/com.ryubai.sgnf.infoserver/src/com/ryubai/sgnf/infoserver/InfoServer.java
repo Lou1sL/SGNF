@@ -14,7 +14,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class InfoServer {
 	
 	private int port = 23345;
-	private ArrayList<SSInfo> ssinfoList = new ArrayList<SSInfo>();
+	static ArrayList<SSInfo> ssinfoList = new ArrayList<SSInfo>();
 	private ISCallHandler callHandler = new ISCallHandler();
 	private int maxConn = 1024;
 	
@@ -68,7 +68,6 @@ public class InfoServer {
 			_process();
 		}
 	}
-	
 	private void _process(){
 		EventLoopGroup bossGroup = new NioEventLoopGroup();//Ïß³Ì×é
         EventLoopGroup workGroup = new NioEventLoopGroup();

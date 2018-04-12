@@ -1,13 +1,16 @@
-﻿namespace SGNFClient
+﻿using System.Collections.Generic;
+
+namespace SGNFClient
 {
     public static partial class Client
     {
         public static bool IsConnected => ISSocketManager.Instance.IsConnceted;
-        internal static string ip;
+        internal static List<SocketUtil.SSInfo> allSSInfo = new List<SocketUtil.SSInfo>();
+        public static List<SocketUtil.SSInfo> AllSSInfo => allSSInfo;
+
 
         public static void Connect(string IP, int Port)
         {
-            ip = IP;
             ISSocketManager.Instance.Connect(IP, Port);
         }
         public static void Disconnect()

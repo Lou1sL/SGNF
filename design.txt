@@ -52,7 +52,8 @@ ss.shut();
 
 
 //Clt
-Client.Room.GetList();
+Client.SSList();
+Client.Room.GetAll();
 Client.Room.Create();
 Client.Room.Join(1000);
 Client.Room.Prepared();
