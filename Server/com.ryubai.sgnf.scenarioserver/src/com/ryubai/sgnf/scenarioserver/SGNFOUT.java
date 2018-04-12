@@ -6,6 +6,6 @@ public class SGNFOUT {
 		System.out.println(">"+ip+": "+str);
 	}
 	public static void WriteConsole(String str){
-		System.out.println(">SGNF IS: "+str);
+		System.out.println(">SGNF SS: "+str);
 	}
 }

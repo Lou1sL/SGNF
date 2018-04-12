@@ -11,14 +11,14 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 public class MessageDecoder extends ByteToMessageDecoder {
-	private Schema<ISSocketModel> schema = RuntimeSchema.getSchema(ISSocketModel.class);// protostuff的写法
+	private Schema<SSSocketModel> schema = RuntimeSchema.getSchema(SSSocketModel.class);// protostuff的写法
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> obj) throws Exception {
 
 		byte[] data = new byte[in.readableBytes()];
 		in.readBytes(data);
-		ISSocketModel message = new ISSocketModel();
+		SSSocketModel message = new SSSocketModel();
 		ProtobufIOUtil.mergeFrom(data, message, schema);
 		obj.add(message);
 

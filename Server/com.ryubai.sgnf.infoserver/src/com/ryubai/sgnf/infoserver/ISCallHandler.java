@@ -44,7 +44,7 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 			
 		}else
 		{
-			ISSocketModel response = dealMsg(message);
+			ISSocketModel response = dealMsg(ctx.channel().id(),message);
 			if (response != null)ctx.writeAndFlush(response);
 		}
 	}
@@ -63,7 +63,7 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 		SGNFOUT.WriteConsole("Client drop ID:" + id);
 	}
 
-	public ISSocketModel dealMsg(ISSocketModel msg) {
+	public ISSocketModel dealMsg(ChannelId id,ISSocketModel msg) {
 		//System.out.println("Client send:" + msg.message.get(0));
 		return msg;
 		//return null;

@@ -5,7 +5,7 @@ import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 @ChannelInboundHandlerAdapter.Sharable
-public class ISCallHandler extends ChannelInboundHandlerAdapter {
+public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
@@ -22,13 +22,13 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 	// 当客户端发送数据到服务器会触发此函数
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		
-		ISSocketModel message = (ISSocketModel)msg;
+		SSSocketModel message = (SSSocketModel)msg;
 		if(message.command == SocketUtil.internalCommand.PING.val())
 		{
 			ctx.writeAndFlush(message);
 		}else
 		{
-			ISSocketModel response = dealMsg(message);
+			SSSocketModel response = dealMsg(message);
 			if (response != null)ctx.writeAndFlush(response);
 		}
 	}
@@ -47,7 +47,7 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 		SGNFOUT.WriteConsole("Client drop ID:" + id);
 	}
 
-	public ISSocketModel dealMsg(ISSocketModel msg) {
+	public SSSocketModel dealMsg(SSSocketModel msg) {
 		//System.out.println("Client send:" + msg.message.get(0));
 		return msg;
 		//return null;
