@@ -77,16 +77,16 @@
       <HintPath>E:/ProgramTools/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>Assets/Newtonsoft.Json.dll</HintPath>
+      <HintPath>Assets/dll/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
-      <HintPath>Assets/protobuf-net.dll</HintPath>
+      <HintPath>Assets/dll/protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="SGNFClient">
-      <HintPath>Assets/SGNFClient.dll</HintPath>
+      <HintPath>Assets/dll/SGNFClient.dll</HintPath>
     </Reference>
     <Reference Include="UnityStandardUtils">
-      <HintPath>Assets/UnityStandardUtils.dll</HintPath>
+      <HintPath>Assets/dll/UnityStandardUtils.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

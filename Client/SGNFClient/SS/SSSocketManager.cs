@@ -9,7 +9,7 @@ using UnityStandardUtils;
 
 namespace SGNFClient
 {
-    internal class ISSocketManager : Singleton<ISSocketManager>
+    internal class SSSocketManager : Singleton<SSSocketManager>
     {
         private bool _isConnected = false;
         internal bool IsConnceted => _isConnected;
@@ -75,12 +75,7 @@ namespace SGNFClient
                 receiveThread.Start();
                 _isConnected = true;
 
-                SGNFDebug.Log("InfoServer connected!");
-                SGNFDebug.Log("Requesting ScenarioServer list...");
-                Client.SendISMsg(new ISSocketModel()
-                {
-                    Command = (int)SocketUtil.InternalCommand.SSINFO,
-                });
+                SGNFDebug.Log("ScenarioServer connected!");
             }
             catch (Exception _e)
             {
@@ -111,7 +106,7 @@ namespace SGNFClient
                         //取出一条完整数据
                         while (_databuffer.GetData(out _socketData))
                         {
-                            ISSocketModel DeData = SocketUtil.ISDeSerial(_socketData);
+                            SSSocketModel DeData = SocketUtil.SSDeSerial(_socketData);
 
                             //如果数据属于内部协议
                             if (Enum.IsDefined(typeof(SocketUtil.InternalCommand), DeData.Command))
@@ -124,31 +119,14 @@ namespace SGNFClient
                                 {
                                     //Client.RcvPingStr = DeData.Message[0];
                                 }
-                                if (DeData.Command == (int)SocketUtil.InternalCommand.SSINFO)
-                                {
-                                    int num = Convert.ToInt32(DeData.Message[0]);
-                                    if (num > 0)
-                                    {
-                                        Client.allSSInfo.Clear();
-                                        for(int i = 0; i < num; i++)
-                                        {
-                                            Client.allSSInfo.Add(new SocketUtil.SSInfo()
-                                            {
-                                                Tag = DeData.Message[i * 3 + 1],
-                                                IP = DeData.Message[i * 3 + 2],
-                                                Port = Convert.ToInt32(DeData.Message[i * 3 + 3]),
-                                            });
-                                        }
-                                    }
-                                    SGNFDebug.ListLog("Got " + num + " row of SS from server",Client.allSSInfo);
-                                }
                             }
                             else
                             {
+                                SGNFDebug.Log("...");
                                 //锁死消息中心消息队列，并添加数据
-                                lock (ISMessageCenter.Instance._netMessageDataQueue)
+                                lock (SSMessageCenter.Instance._netMessageDataQueue)
                                 {
-                                    ISMessageCenter.Instance._netMessageDataQueue.Enqueue(DeData);
+                                    SSMessageCenter.Instance._netMessageDataQueue.Enqueue(DeData);
                                 }
                             }
                         }
@@ -181,7 +159,7 @@ namespace SGNFClient
             SocketUtil.IntToBytes(_data.Length).CopyTo(data, 0);
             _data.CopyTo(data, 4);
 
-            SGNFDebug.HEXLog("send",data,data.Length);
+            //SGNFDebug.HEXLog("send",data,data.Length);
             clientSocket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(_onSendMsg), clientSocket);
         }
 

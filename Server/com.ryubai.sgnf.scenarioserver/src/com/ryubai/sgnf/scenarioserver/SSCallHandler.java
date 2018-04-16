@@ -3,18 +3,23 @@ package com.ryubai.sgnf.scenarioserver;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.socket.SocketChannel;
 
 @ChannelInboundHandlerAdapter.Sharable
-public class SSFrameUpdater extends ChannelInboundHandlerAdapter {
+public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
+		String uuid = ctx.channel().id().asLongText();
+        PlayerPool.addPlayerChannel(uuid, (SocketChannel)ctx.channel());
 		clientJoin(ctx.channel().id());
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception// 当客户端断开连接的时候触发函数
 	{
+		String uuid = ctx.channel().id().asLongText();
+        PlayerPool.removePlayerChannel(uuid);
 		clientDrop(ctx.channel().id());
 	}
 
@@ -28,26 +33,26 @@ public class SSFrameUpdater extends ChannelInboundHandlerAdapter {
 			ctx.writeAndFlush(message);
 		}else
 		{
-			SSSocketModel response = update(message);
+			SSSocketModel response = dealMsg(message);
 			if (response != null)ctx.writeAndFlush(response);
 		}
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		SGNFOUT.WriteConsole("FUCKED UP");
+		SSOUT.WriteConsole("FUCKED UP");
 		cause.printStackTrace();
 	}
 
 	public void clientJoin(ChannelId id) {
-		SGNFOUT.WriteConsole("Client join ID:" + id);
+		SSOUT.WriteConsole("Client join ID:" + id);
 	}
 
 	public void clientDrop(ChannelId id) {
-		SGNFOUT.WriteConsole("Client drop ID:" + id);
+		SSOUT.WriteConsole("Client drop ID:" + id);
 	}
 
-	public SSSocketModel update(SSSocketModel msg) {
+	public SSSocketModel dealMsg(SSSocketModel msg) {
 		//System.out.println("Client send:" + msg.message.get(0));
 		return msg;
 		//return null;

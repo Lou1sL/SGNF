@@ -1,6 +1,6 @@
 package com.ryubai.sgnf.infoserver;
 
-public class SGNFOUT {
+public class ISOUT {
 
 	public static void WriteConsole(String ip,String str){
 		System.out.println(">IS "+ip+": "+str);

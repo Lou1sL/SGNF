@@ -15,6 +15,7 @@ namespace SGNFClient
         }
         public static void Disconnect()
         {
+            SSSocketManager.Instance.Close();
             ISSocketManager.Instance.Close();
         }
 
@@ -30,17 +31,18 @@ namespace SGNFClient
             ISSocketManager.Instance.SendMsgBase(rawData);
         }
         
-        public static void AddCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
+        public static void AddISCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
         {
             CheckEnum<T>();
             ISMessageCenter.Instance.addObserver((int)(object)cmd, callBack);
         }
 
-        public static void RemoveCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
+        public static void RemoveISCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
         {
             CheckEnum<T>();
             ISMessageCenter.Instance.removeObserver((int)(object)cmd, callBack);
         }
+
 
         private static void CheckEnum<T>()
         {
@@ -51,14 +53,36 @@ namespace SGNFClient
 
 
 
-        public static void JoinSS(string Tag)
+        public static void JoinSS(SocketUtil.SSInfo ssinfo)
         {
-
+            SSSocketManager.Instance.Connect(ssinfo.IP, ssinfo.Port);
         }
 
         public static void LeaveSS()
         {
+            SSSocketManager.Instance.Close();
+        }
 
+
+        public static void SendSSMsg(SSSocketModel data)
+        {
+            if (!IsConnected) return;
+            if (!SSSocketManager.Instance.IsConnceted) return;
+
+            byte[] rawData = SocketUtil.SSSerial(data);
+            SSSocketManager.Instance.SendMsgBase(rawData);
+        }
+
+        public static void AddSSCallBackObserver<T>(T cmd, Callback_SSMessage_Handle callBack)
+        {
+            CheckEnum<T>();
+            SSMessageCenter.Instance.addObserver((int)(object)cmd, callBack);
+        }
+
+        public static void RemoveSSCallBackObserver<T>(T cmd, Callback_SSMessage_Handle callBack)
+        {
+            CheckEnum<T>();
+            SSMessageCenter.Instance.removeObserver((int)(object)cmd, callBack);
         }
     }
 }

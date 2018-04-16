@@ -46,18 +46,18 @@ public class InfoServer {
 	_processThread th = new _processThread();
 	public void startThread(){
 		if(!isRunning){
-			SGNFOUT.WriteConsole("Starting thread");
+			ISOUT.WriteConsole("Starting thread");
         	isRunning = true;
         	th.start();
-        }else SGNFOUT.WriteConsole("Server is already running!");
+        }else ISOUT.WriteConsole("Server is already running!");
 	}
 	@SuppressWarnings("deprecation")
 	public void shut(){
 		if(isRunning){
-			SGNFOUT.WriteConsole("Closing");
+			ISOUT.WriteConsole("Closing");
         	isRunning = false;
         	th.stop();
-        }else SGNFOUT.WriteConsole("Server is not running!");
+        }else ISOUT.WriteConsole("Server is not running!");
 	}
 	
 	
@@ -90,7 +90,7 @@ public class InfoServer {
             ChannelFuture f = b.bind(port).sync();
             if (f.isSuccess())
             {
-            	SGNFOUT.WriteConsole("Server starts success at port:" + port);
+            	ISOUT.WriteConsole("Server starts success at port:" + port);
             }
             f.channel().closeFuture().sync();
         } catch (Exception e) {

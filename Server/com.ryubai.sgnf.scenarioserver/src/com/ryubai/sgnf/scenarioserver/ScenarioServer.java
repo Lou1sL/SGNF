@@ -1,6 +1,8 @@
 package com.ryubai.sgnf.scenarioserver;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -13,93 +15,128 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class ScenarioServer {
 
-
-	private int port = 34456;
-	private SSFrameUpdater callHandler = new SSFrameUpdater();
-	private int maxConn = 1024;
+	private SSCallHandler callHandler = new SSCallHandler();
+	private TickSender tickSender = new TickSender();
+	
 	int tick = 60;
-	
+	private int maxConn = 1024;
+	private int port = 34456;
+
 	private boolean isRunning = false;
-	
-	
-	public void setFrameUpdater(SSFrameUpdater ch){
+
+	public void setCallHandler(SSCallHandler ch) {
 		callHandler = ch;
 	}
-	public void setTick(int t){
+	public void setTickSender(TickSender ts){
+		tickSender = ts;
+	}
+
+	public void setTick(int t) {
 		tick = t;
 	}
-	public void setMaxConn(int c){
+
+	public void setMaxConn(int c) {
 		maxConn = c;
 	}
-	public void setPort(int p){
+
+	public void setPort(int p) {
 		port = p;
 	}
-	
-	
-	public void start()
-    {
-        if(!isRunning){
-        	isRunning = true;
-        	_process();
-        }
-    }
-	
+
+	public void start() {
+		if (!isRunning) {
+			isRunning = true;
+			_process();
+			sth.start();
+		}
+	}
+
 	_processThread th = new _processThread();
-	public void startThread(){
-		if(!isRunning){
-			SGNFOUT.WriteConsole("Starting thread");
-        	isRunning = true;
-        	th.start();
-        }else SGNFOUT.WriteConsole("Server is already running!");
+	_sssendThread sth = new _sssendThread();
+	
+	public void startThread() {
+		if (!isRunning) {
+			SSOUT.WriteConsole("Starting thread");
+			isRunning = true;
+			th.start();
+			sth.start();
+		} else
+			SSOUT.WriteConsole("Server is already running!");
 	}
+
 	@SuppressWarnings("deprecation")
-	public void shut(){
-		if(isRunning){
-			SGNFOUT.WriteConsole("Closing");
-        	isRunning = false;
-        	th.stop();
-        }else SGNFOUT.WriteConsole("Server is not running!");
+	public void shut() {
+		if (isRunning) {
+			SSOUT.WriteConsole("Closing");
+			isRunning = false;
+			th.stop();
+			sth.stop();
+		} else
+			SSOUT.WriteConsole("Server is not running!");
 	}
 	
-	
-	
-	public class _processThread extends Thread{
+	public class _processThread extends Thread {
 		@Override
-        public void run() {
+		public void run() {
 			_process();
 		}
 	}
-	private void _process(){
-		EventLoopGroup bossGroup = new NioEventLoopGroup();//线程组
-        EventLoopGroup workGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();//server启动管理配置
-            b.group(bossGroup, workGroup)
-            .channel(NioServerSocketChannel.class)
-            .option(ChannelOption.SO_BACKLOG, maxConn)//最大客户端连接数
-            .option(ChannelOption.SO_REUSEADDR,true)
-            //.option(ChannelOption.SO_REUSEPORT,true)
-            .childHandler(new ChannelInitializer<SocketChannel>() {
-            	@Override
-                protected void initChannel(SocketChannel ch) throws Exception {
-            		ch.pipeline().addLast(new LengthDecoder(1024,0,4,0,4));
-            		ch.pipeline().addLast(new MessageDecoder());
-            		ch.pipeline().addLast(new MessageEncoder());
-            		ch.pipeline().addLast(callHandler);
-            		}
-            	});
-            ChannelFuture f = b.bind(port).sync();
-            if (f.isSuccess())
-            {
-            	SGNFOUT.WriteConsole("Server starts success at port:" + port);
-            }
-            f.channel().closeFuture().sync();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally{
-            bossGroup.shutdownGracefully();
-            workGroup.shutdownGracefully();
-        }
+
+	private void _process() {
+		EventLoopGroup bossGroup = new NioEventLoopGroup();// 线程组
+		EventLoopGroup workGroup = new NioEventLoopGroup();
+		try {
+			ServerBootstrap b = new ServerBootstrap();// server启动管理配置
+			b.group(bossGroup, workGroup).channel(NioServerSocketChannel.class)
+					.option(ChannelOption.SO_BACKLOG, maxConn)// 最大客户端连接数
+					.option(ChannelOption.SO_REUSEADDR, true)
+					// .option(ChannelOption.SO_REUSEPORT,true)
+					.childHandler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						protected void initChannel(SocketChannel ch) throws Exception {
+							ch.pipeline().addLast(new LengthDecoder(1024, 0, 4, 0, 4));
+							ch.pipeline().addLast(new MessageDecoder());
+							ch.pipeline().addLast(new MessageEncoder());
+							ch.pipeline().addLast(callHandler);
+						}
+					});
+			ChannelFuture f = b.bind(port).sync();
+			if (f.isSuccess()) {
+				SSOUT.WriteConsole("Server starts success at port:" + port);
+			}
+			f.channel().closeFuture().sync();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			bossGroup.shutdownGracefully();
+			workGroup.shutdownGracefully();
+		}
 	}
-	
+
+	public class _sssendThread extends Thread {
+		@Override
+		public void run() {
+			sendTaskLoop: for (;;) {
+				//System.out.println("task is beginning...");
+				try {
+					Map<String, SocketChannel> map = PlayerPool.getChannels();
+					Iterator<String> it = map.keySet().iterator();
+					while (it.hasNext()) {
+						String key = it.next();
+						SocketChannel obj = map.get(key);
+						//SSOUT.WriteConsole("SENDING"+key);
+						obj.writeAndFlush(tickSender.dealSend(key));						
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					Thread.sleep(1000 / tick);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	};
 }

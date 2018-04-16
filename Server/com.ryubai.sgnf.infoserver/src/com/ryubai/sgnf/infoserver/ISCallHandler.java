@@ -51,16 +51,16 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		SGNFOUT.WriteConsole("FUCKED UP");
+		ISOUT.WriteConsole("FUCKED UP");
 		cause.printStackTrace();
 	}
 
 	public void clientJoin(ChannelId id) {
-		SGNFOUT.WriteConsole("Client join ID:" + id);
+		ISOUT.WriteConsole("Client join ID:" + id);
 	}
 
 	public void clientDrop(ChannelId id) {
-		SGNFOUT.WriteConsole("Client drop ID:" + id);
+		ISOUT.WriteConsole("Client drop ID:" + id);
 	}
 
 	public ISSocketModel dealMsg(ChannelId id,ISSocketModel msg) {

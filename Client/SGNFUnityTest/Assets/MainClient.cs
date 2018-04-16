@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class MainClient : MonoBehaviour
 {
+    public Transform player;
+
     public InputField inputUserName;
     public InputField inputPass;
     public Text result;
@@ -15,27 +17,29 @@ public class MainClient : MonoBehaviour
     public enum ProtocalCommand
     {
         TEST_LOGIN = 0x1000,
+        TEST_PLAYER = 0x1001,
     }
     
     private void Start()
     {
         //绑定数据包发送后的服务器回调处理函数
-        Client.AddCallBackObserver(ProtocalCommand.TEST_LOGIN, CallBack_Test);
+        Client.AddISCallBackObserver(ProtocalCommand.TEST_LOGIN, ISCallBack_Test);
+        Client.AddSSCallBackObserver(ProtocalCommand.TEST_PLAYER, SSCallBack_Test);
         Client.Connect("192.168.1.102", 9999);
     }
 
     private void OnDisable()
     {
         //解绑
-        Client.RemoveCallBackObserver(ProtocalCommand.TEST_LOGIN, CallBack_Test);
+        Client.RemoveISCallBackObserver(ProtocalCommand.TEST_LOGIN, ISCallBack_Test);
+        Client.RemoveSSCallBackObserver(ProtocalCommand.TEST_PLAYER, SSCallBack_Test);
     }
     void OnApplicationQuit()
     {
         
         Client.Disconnect();
     }
-
-    private System.DateTime sendT;
+    
 
     /// <summary>
     /// 发送数据包
@@ -52,17 +56,26 @@ public class MainClient : MonoBehaviour
             }
         };
         Client.SendISMsg(model);
-        sendT = System.DateTime.Now;
+    }
+
+    public void JoinFirstSS()
+    {
+        Client.JoinSS(Client.AllSSInfo[0]);
     }
 
     /// <summary>
     /// 发送后的回调
     /// </summary>
     /// <param name="_msgData"></param>
-    private void CallBack_Test(ISSocketModel _msgData)
+    private void ISCallBack_Test(ISSocketModel _msgData)
     {
         result.text = _msgData.Message[0];
-        Debug.Log("PING: "+(System.DateTime.Now - sendT).Milliseconds);
     }
-    
+
+    private void SSCallBack_Test(SSSocketModel _msgData)
+    {
+        Debug.Log("aaa");
+        player.position = new Vector3(_msgData.Vector[0].X, _msgData.Vector[0].Y, _msgData.Vector[0].Z);
+    }
+
 }
