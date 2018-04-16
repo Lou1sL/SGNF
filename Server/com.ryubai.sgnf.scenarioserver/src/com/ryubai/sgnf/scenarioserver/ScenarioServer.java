@@ -15,14 +15,14 @@ public class ScenarioServer {
 
 
 	private int port = 34456;
-	private SSCallHandler callHandler = new SSCallHandler();
+	private SSFrameUpdater callHandler = new SSFrameUpdater();
 	private int maxConn = 1024;
 	int tick = 60;
 	
 	private boolean isRunning = false;
 	
 	
-	public void setCallHandler(SSCallHandler ch){
+	public void setFrameUpdater(SSFrameUpdater ch){
 		callHandler = ch;
 	}
 	public void setTick(int t){

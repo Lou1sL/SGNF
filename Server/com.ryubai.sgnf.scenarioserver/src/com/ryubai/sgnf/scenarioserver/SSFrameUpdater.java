@@ -5,7 +5,7 @@ import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 @ChannelInboundHandlerAdapter.Sharable
-public class SSCallHandler extends ChannelInboundHandlerAdapter {
+public class SSFrameUpdater extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
@@ -28,7 +28,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 			ctx.writeAndFlush(message);
 		}else
 		{
-			SSSocketModel response = dealMsg(message);
+			SSSocketModel response = update(message);
 			if (response != null)ctx.writeAndFlush(response);
 		}
 	}
@@ -47,7 +47,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 		SGNFOUT.WriteConsole("Client drop ID:" + id);
 	}
 
-	public SSSocketModel dealMsg(SSSocketModel msg) {
+	public SSSocketModel update(SSSocketModel msg) {
 		//System.out.println("Client send:" + msg.message.get(0));
 		return msg;
 		//return null;

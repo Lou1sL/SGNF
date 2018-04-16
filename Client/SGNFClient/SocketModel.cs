@@ -25,52 +25,25 @@ namespace SGNFClient
         [ProtoMember(2, IsRequired = true)]
         public int CurrentTick;
         [ProtoMember(3, IsRequired = false)]
-        public List<VecObj> VectorObject;
-
-    }
-
-    [ProtoContract]
-    public class VecObj
-    {
-        [ProtoMember(1, IsRequired = true)]
-        public string Tag;
-        [ProtoMember(2, IsRequired = true)]
-        public Position position;
-        [ProtoMember(3, IsRequired = true)]
-        public Rotation rotation;
+        public List<int> Message;
         [ProtoMember(4, IsRequired = false)]
-        public Scale scale;
+        public List<Vec> Vector;
+
     }
+    
     [ProtoContract]
-    public class Position
+    public class Vec
     {
         [ProtoMember(1, IsRequired = true)]
-        public float X;
+        public int Tag;
         [ProtoMember(2, IsRequired = true)]
+        public float X;
+        [ProtoMember(3, IsRequired = true)]
         public float Y;
-        [ProtoMember(3, IsRequired = false)]
+        [ProtoMember(4, IsRequired = false)]
         public float Z;
     }
-    [ProtoContract]
-    public class Rotation
-    {
-        [ProtoMember(1, IsRequired = true)]
-        public float RotZ;
-        [ProtoMember(2, IsRequired = false)]
-        public float RotX;
-        [ProtoMember(3, IsRequired = false)]
-        public float RotY;
-    }
-    [ProtoContract]
-    public class Scale
-    {
-        [ProtoMember(1, IsRequired = false)]
-        public float ScaleX;
-        [ProtoMember(2, IsRequired = false)]
-        public float ScaleY;
-        [ProtoMember(3, IsRequired = false)]
-        public float ScaleZ;
-    }
+
 
 
     public static class SocketUtil
@@ -96,7 +69,7 @@ namespace SGNFClient
             SSINFO = 0xF002,//客户端从IS获取全部SS列
         }
 
-        public static byte[] ISSerial(ISSocketModel socketModel)//将SocketModel转化成字节数组
+        internal static byte[] ISSerial(ISSocketModel socketModel)//将SocketModel转化成字节数组
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -107,7 +80,7 @@ namespace SGNFClient
                 return data;
             }
         }
-        public static ISSocketModel ISDeSerial(byte[] msg)//将字节数组转化成我们的消息类型SocketModel
+        internal static ISSocketModel ISDeSerial(byte[] msg)//将字节数组转化成我们的消息类型SocketModel
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -118,7 +91,7 @@ namespace SGNFClient
             }
         }
 
-        public static byte[] SSSerial(SSSocketModel socketModel)//将SocketModel转化成字节数组
+        internal static byte[] SSSerial(SSSocketModel socketModel)//将SocketModel转化成字节数组
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -129,7 +102,7 @@ namespace SGNFClient
                 return data;
             }
         }
-        public static SSSocketModel SSDeSerial(byte[] msg)//将字节数组转化成我们的消息类型SocketModel
+        internal static SSSocketModel SSDeSerial(byte[] msg)//将字节数组转化成我们的消息类型SocketModel
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -141,7 +114,7 @@ namespace SGNFClient
         }
 
 
-        public static int BytesToInt(byte[] data, int offset)
+        internal static int BytesToInt(byte[] data, int offset)
         {
             int num = 0;
             for (int i = offset; i < offset + 4; i++)
@@ -151,7 +124,7 @@ namespace SGNFClient
             }
             return num;
         }
-        public static byte[] IntToBytes(int num)
+        internal static byte[] IntToBytes(int num)
         {
             byte[] bytes = new byte[4];
             for (int i = 0; i < 4; i++)

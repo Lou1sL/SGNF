@@ -47,5 +47,18 @@ namespace SGNFClient
             if (!typeof(T).IsEnum)
                 throw new System.ArgumentException("Please use Enum for Command !");
         }
+
+
+
+
+        public static void JoinSS(string Tag)
+        {
+
+        }
+
+        public static void LeaveSS()
+        {
+
+        }
     }
 }

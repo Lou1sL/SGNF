@@ -5,9 +5,5 @@ import java.util.List;
 
 public class ISSocketModel {
     public int command;
-    public List<String> message;
-    
-    public ISSocketModel(){
-    	message = new ArrayList<String>();
-    }
+    public List<String> message = new ArrayList<String>();
 }

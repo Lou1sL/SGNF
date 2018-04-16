@@ -5,9 +5,15 @@ import java.util.List;
 
 public class SSSocketModel {
     public int command;
-    public List<String> message;
+    public int currentTick;
+    public List<Integer> message = new ArrayList<Integer>();
+    public List<Vec> vector = new ArrayList<Vec>();
     
-    public SSSocketModel(){
-    	message = new ArrayList<String>();
+    
+    public class Vec{
+    	public int tag = -1;
+    	public float x = 0;
+    	public float y = 0;
+    	public float z = 0;
     }
 }

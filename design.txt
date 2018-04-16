@@ -1,40 +1,5 @@
-
-
-//使用方法----------------------------------------------------------------------
-
-//IS---------------------------
-InfoServer is = new InfoServer();
-
-SSInfo ssinfo[] = 
-{
-	new SSInfo("ss0","localhost",9876,"biubiubiu");
-};
-is.setSSInfo(ssinfo);
-
-is.setCallHandler(new ISCallHandler(){
-	@Override
-	public Object dealMsg(Object msg)
-	{
-		ISModel message = (ISModel)msg;
-		ISModel response = new ISModel();
-		
-		if(message.Command == Command.LOGIN)
-		{
-			if(message.Name.equals("emmm") && message.Password.equals("biabiabia"))response.Command = Command.LOGINSUCCEED;
-			else response.Command = Command.LOGINFAILED;
-		}else return null;
-		
-	}
-});
-
-is.setMaxConn(1024);
-is.setPort(9999);
-is.start();
-
 //打印连接数量，CPU负载，内存占用，硬盘I/O
 is.getSSStatus();
-
-is.shut();
 
 //SS---------------------------
 ScenarioServer ss = new ScenarioServer();
@@ -59,33 +24,6 @@ Client.Room.Exit();
 
 
 //----------------------------------------------------------------------
-
-流程：
-
-
-Clt发送登录凭据到IS，由用户判断正确性并调用CountAsLoggedIn(int PlayerID,Socket PlayerSocket)保持连接
-
-
-
-用户定义的Clt部分：
-房间的战局信息数据包格式
-用户定义的IS部分：
-账号密码登陆验证判断逻辑
-房间的战局信息数据包格式
-用户定义的SS部分：
-玩家场景同步的数据包格式及逻辑
-
-
-
-
-对于该框架，玩家只有一个全局唯一值来表示：PlayerID
-至于玩家的具体信息啥的是用框架的人的事情
-那框架内没有账号密码验证过程怎么处理呢？
-在IS中，有个CountAsLoggedIn(int PlayerID,Socket PlayerSocket)函数
-调用了就算做该玩家已登录咯~
-
-
-
 
 
 
@@ -146,8 +84,6 @@ class RoomContainer
 
 
 IS:
-Arr<ServerSetting> AllSS
-Arr<Int> OnlinePlayer
 Arr<Room> ActiveRoom
 
 Net Bool Login()
