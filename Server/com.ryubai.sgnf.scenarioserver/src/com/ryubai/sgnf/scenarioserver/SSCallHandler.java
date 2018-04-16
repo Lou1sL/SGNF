@@ -11,7 +11,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
 		String uuid = ctx.channel().id().asLongText();
-        PlayerPool.addPlayerChannel(uuid, (SocketChannel)ctx.channel());
+        PlayerPool.addPlayerChannel(uuid, ctx.channel());
 		clientJoin(ctx.channel().id());
 	}
 
@@ -33,7 +33,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 			ctx.writeAndFlush(message);
 		}else
 		{
-			SSSocketModel response = dealMsg(message);
+			SSSocketModel response = dealMsg(ctx.channel().id(),message);
 			if (response != null)ctx.writeAndFlush(response);
 		}
 	}
@@ -52,7 +52,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 		SSOUT.WriteConsole("Client drop ID:" + id);
 	}
 
-	public SSSocketModel dealMsg(SSSocketModel msg) {
+	public SSSocketModel dealMsg(ChannelId id,SSSocketModel msg) {
 		//System.out.println("Client send:" + msg.message.get(0));
 		return msg;
 		//return null;

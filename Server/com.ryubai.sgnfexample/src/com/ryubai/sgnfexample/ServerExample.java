@@ -111,12 +111,12 @@ public class ServerExample {
 		ScenarioServer ss = new ScenarioServer();
 		ss.setCallHandler(new SSCallHandler(){
 			@Override
-			public SSSocketModel dealMsg(SSSocketModel message){
+			public SSSocketModel dealMsg(ChannelId id,SSSocketModel message){
 				
 				
+				SSOUT.WriteConsole("Client send ID:" + id);
 				
-				
-				return null;
+				return message;
 			}
 			//Íæ¼ÒÁ¬½Ó
 			@Override
@@ -135,7 +135,7 @@ public class ServerExample {
 		ss.setTickSender(new TickSender(){
 			@Override
 			public SSSocketModel dealSend(String channelId){
-				
+				//SSOUT.WriteConsole("SEND");
 				SSSocketModel send = new SSSocketModel();
 				send.command = COMMAND_UPDATE_PLAYER;
 				send.vector.add(send.new Vec());

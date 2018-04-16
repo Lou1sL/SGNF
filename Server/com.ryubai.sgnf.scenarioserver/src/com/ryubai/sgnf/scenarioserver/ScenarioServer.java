@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -120,13 +122,15 @@ public class ScenarioServer {
 			sendTaskLoop: for (;;) {
 				//System.out.println("task is beginning...");
 				try {
-					Map<String, SocketChannel> map = PlayerPool.getChannels();
+					Map<String, Channel> map = PlayerPool.getChannels();
 					Iterator<String> it = map.keySet().iterator();
 					while (it.hasNext()) {
 						String key = it.next();
-						SocketChannel obj = map.get(key);
+						Channel obj = map.get(key);
 						//SSOUT.WriteConsole("SENDING"+key);
-						obj.writeAndFlush(tickSender.dealSend(key));						
+						if(obj.isActive())obj.writeAndFlush(tickSender.dealSend(key));						
+						else PlayerPool.removePlayerChannel(key);
+						
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

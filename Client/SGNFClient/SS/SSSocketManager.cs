@@ -124,9 +124,9 @@ namespace SGNFClient
                             {
                                 SGNFDebug.Log("...");
                                 //锁死消息中心消息队列，并添加数据
-                                lock (SSMessageCenter.Instance._netMessageDataQueue)
+                                lock (SSMessageCenter.Instance._ssMessageDataQueue)
                                 {
-                                    SSMessageCenter.Instance._netMessageDataQueue.Enqueue(DeData);
+                                    SSMessageCenter.Instance._ssMessageDataQueue.Enqueue(DeData);
                                 }
                             }
                         }
