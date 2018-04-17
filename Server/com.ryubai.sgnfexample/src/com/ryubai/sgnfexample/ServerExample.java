@@ -30,7 +30,7 @@ public class ServerExample {
 		@SuppressWarnings("serial")
 		private static ArrayList<SSInfo> ssinfo = new ArrayList<SSInfo>() {
 			{
-				add(new SSInfo("ss0", "127.0.0.1", 9876));
+				add(new SSInfo("ss0", "192.168.1.102", 9876));
 			}
 		};
 	
@@ -118,6 +118,13 @@ public class ServerExample {
 				
 				return message;
 			}
+			@Override
+			public SSSocketModel tickSend(ChannelId id){
+				SSSocketModel send = new SSSocketModel();
+				send.command = COMMAND_UPDATE_PLAYER;
+				send.vector.add(send.new Vec());
+				return send;
+			}
 			//Íæ¼ÒÁ¬½Ó
 			@Override
 			public void clientJoin(ChannelId id) {
@@ -132,16 +139,6 @@ public class ServerExample {
 		});
 		
 		
-		ss.setTickSender(new TickSender(){
-			@Override
-			public SSSocketModel dealSend(String channelId){
-				//SSOUT.WriteConsole("SEND");
-				SSSocketModel send = new SSSocketModel();
-				send.command = COMMAND_UPDATE_PLAYER;
-				send.vector.add(send.new Vec());
-				return send;
-			}
-		});
 		ss.setMaxConn(1024);
 		ss.setTick(30);
 		ss.setPort(ssinfo.get(0).Port);

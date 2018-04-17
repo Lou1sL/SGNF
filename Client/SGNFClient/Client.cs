@@ -8,6 +8,9 @@ namespace SGNFClient
         internal static List<SocketUtil.SSInfo> allSSInfo = new List<SocketUtil.SSInfo>();
         public static List<SocketUtil.SSInfo> AllSSInfo => allSSInfo;
 
+        public static bool IsJoined => SSSocketManager.Instance.IsConnceted;
+        internal static int tick = -1;
+        public static int Tick => tick;
 
         public static void Connect(string IP, int Port)
         {
@@ -17,6 +20,8 @@ namespace SGNFClient
         {
             SSSocketManager.Instance.Close();
             ISSocketManager.Instance.Close();
+            allSSInfo.Clear();
+            tick = -1;
         }
 
         /// <summary>
@@ -61,6 +66,7 @@ namespace SGNFClient
         public static void LeaveSS()
         {
             SSSocketManager.Instance.Close();
+            tick = -1;
         }
 
 

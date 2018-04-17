@@ -53,6 +53,7 @@ namespace SGNFClient
             public string Tag;
             public string IP;
             public int Port;
+
             public override string ToString()
             {
                 return "TAG: " + Tag + " IP: " + IP + " PORT: " + Port;
@@ -67,6 +68,9 @@ namespace SGNFClient
 
             //Clt-IS
             SSINFO = 0xF002,//客户端从IS获取全部SS列
+
+            //Clt-SS
+            TICK = 0xF003,//客户端从SS获取tick
         }
 
         internal static byte[] ISSerial(ISSocketModel socketModel)//将SocketModel转化成字节数组

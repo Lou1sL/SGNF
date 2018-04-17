@@ -56,11 +56,6 @@ public class MainClient : MonoBehaviour
             }
         };
         Client.SendISMsg(model);
-
-        Client.SendSSMsg(new SSSocketModel()
-        {
-            Command = (int)ProtocalCommand.TEST_PLAYER,
-        });
     }
 
     public void JoinFirstSS()
@@ -81,6 +76,11 @@ public class MainClient : MonoBehaviour
     {
         Debug.Log("aaa"+ _msgData.Vector[0].Tag);
         player.position = new Vector3(_msgData.Vector[0].X, _msgData.Vector[0].Y, _msgData.Vector[0].Z);
+
+        Client.SendSSMsg(new SSSocketModel()
+        {
+            Command = (int)ProtocalCommand.TEST_PLAYER,
+        });
     }
 
 }

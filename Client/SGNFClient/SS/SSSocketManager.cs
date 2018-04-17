@@ -76,6 +76,11 @@ namespace SGNFClient
                 _isConnected = true;
 
                 SGNFDebug.Log("ScenarioServer connected!");
+                SGNFDebug.Log("Requesting tick!");
+                Client.SendSSMsg(new SSSocketModel()
+                {
+                    Command = (int)SocketUtil.InternalCommand.TICK,
+                });
             }
             catch (Exception _e)
             {
@@ -119,10 +124,21 @@ namespace SGNFClient
                                 {
                                     //Client.RcvPingStr = DeData.Message[0];
                                 }
+                                if (DeData.Command == (int)SocketUtil.InternalCommand.TICK)
+                                {
+                                    if (DeData.Message.Count>=1)
+                                    {
+                                        Client.tick = DeData.Message[0];
+                                        SGNFDebug.Log("Got Tick!Which is " + DeData.Message[0]);
+                                    }
+                                    else
+                                    {
+                                        SGNFDebug.ExceptionCaught(new Exception("Recieved nothing from TICK package!")); ;
+                                    }
+                                }
                             }
                             else
                             {
-                                SGNFDebug.Log("...");
                                 //锁死消息中心消息队列，并添加数据
                                 lock (SSMessageCenter.Instance._ssMessageDataQueue)
                                 {

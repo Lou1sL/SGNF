@@ -42,8 +42,11 @@ public class SocketUtil {
 		PING(0xF001), // 客户端发来一个随机数，服务器接受此指令后返回该随机数
 
 		// Client-IS
-		SSINFO(0xF002);// 客户端从IS获取全部SS列
+		SSINFO(0xF002),// 客户端从IS获取全部SS列
 
+		// Client-SS
+		TICK(0xF003);//获取时钟
+		
 		private int i;
 
 		private internalCommand(int i) {

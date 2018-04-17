@@ -3,6 +3,7 @@ package com.ryubai.sgnf.scenarioserver;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -14,13 +15,13 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 
 public class ScenarioServer {
 
 	private SSCallHandler callHandler = new SSCallHandler();
-	private TickSender tickSender = new TickSender();
 	
-	int tick = 60;
+	static int tick = 60;
 	private int maxConn = 1024;
 	private int port = 34456;
 
@@ -28,9 +29,6 @@ public class ScenarioServer {
 
 	public void setCallHandler(SSCallHandler ch) {
 		callHandler = ch;
-	}
-	public void setTickSender(TickSender ts){
-		tickSender = ts;
 	}
 
 	public void setTick(int t) {
@@ -49,19 +47,16 @@ public class ScenarioServer {
 		if (!isRunning) {
 			isRunning = true;
 			_process();
-			sth.start();
 		}
 	}
 
 	_processThread th = new _processThread();
-	_sssendThread sth = new _sssendThread();
 	
 	public void startThread() {
 		if (!isRunning) {
 			SSOUT.WriteConsole("Starting thread");
 			isRunning = true;
 			th.start();
-			sth.start();
 		} else
 			SSOUT.WriteConsole("Server is already running!");
 	}
@@ -72,7 +67,6 @@ public class ScenarioServer {
 			SSOUT.WriteConsole("Closing");
 			isRunning = false;
 			th.stop();
-			sth.stop();
 		} else
 			SSOUT.WriteConsole("Server is not running!");
 	}
@@ -96,6 +90,7 @@ public class ScenarioServer {
 					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel ch) throws Exception {
+							ch.pipeline().addLast(new IdleStateHandler(0,0,1000/tick,TimeUnit.MILLISECONDS));
 							ch.pipeline().addLast(new LengthDecoder(1024, 0, 4, 0, 4));
 							ch.pipeline().addLast(new MessageDecoder());
 							ch.pipeline().addLast(new MessageEncoder());
@@ -115,32 +110,4 @@ public class ScenarioServer {
 			workGroup.shutdownGracefully();
 		}
 	}
-
-	public class _sssendThread extends Thread {
-		@Override
-		public void run() {
-			sendTaskLoop: for (;;) {
-				//System.out.println("task is beginning...");
-				try {
-					Map<String, Channel> map = PlayerPool.getChannels();
-					Iterator<String> it = map.keySet().iterator();
-					while (it.hasNext()) {
-						String key = it.next();
-						Channel obj = map.get(key);
-						//SSOUT.WriteConsole("SENDING"+key);
-						if(obj.isActive())obj.writeAndFlush(tickSender.dealSend(key));						
-						else PlayerPool.removePlayerChannel(key);
-						
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					Thread.sleep(1000 / tick);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	};
 }
