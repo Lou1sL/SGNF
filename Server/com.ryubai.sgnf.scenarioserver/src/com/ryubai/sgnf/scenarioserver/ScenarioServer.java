@@ -1,14 +1,9 @@
 package com.ryubai.sgnf.scenarioserver;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -20,7 +15,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 public class ScenarioServer {
 
 	private SSCallHandler callHandler = new SSCallHandler();
-	
+
 	static int tick = 60;
 	private int maxConn = 1024;
 	private int port = 34456;
@@ -51,7 +46,7 @@ public class ScenarioServer {
 	}
 
 	_processThread th = new _processThread();
-	
+
 	public void startThread() {
 		if (!isRunning) {
 			SSOUT.WriteConsole("Starting thread");
@@ -70,7 +65,7 @@ public class ScenarioServer {
 		} else
 			SSOUT.WriteConsole("Server is not running!");
 	}
-	
+
 	public class _processThread extends Thread {
 		@Override
 		public void run() {
@@ -90,7 +85,7 @@ public class ScenarioServer {
 					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel ch) throws Exception {
-							ch.pipeline().addLast(new IdleStateHandler(0,0,1000/tick,TimeUnit.MILLISECONDS));
+							ch.pipeline().addLast(new IdleStateHandler(0, 0, 1000 / tick, TimeUnit.MILLISECONDS));
 							ch.pipeline().addLast(new LengthDecoder(1024, 0, 4, 0, 4));
 							ch.pipeline().addLast(new MessageDecoder());
 							ch.pipeline().addLast(new MessageEncoder());
@@ -102,7 +97,7 @@ public class ScenarioServer {
 				SSOUT.WriteConsole("Server starts success at port:" + port);
 			}
 			f.channel().closeFuture().sync();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

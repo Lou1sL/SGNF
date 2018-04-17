@@ -56,6 +56,11 @@ public class MainClient : MonoBehaviour
             }
         };
         Client.SendISMsg(model);
+
+        Client.SendSSMsg(new SSSocketModel()
+        {
+            Command = (int)ProtocalCommand.TEST_PLAYER
+        });
     }
 
     public void JoinFirstSS()

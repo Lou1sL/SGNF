@@ -77,6 +77,7 @@ public class InfoServer {
             .channel(NioServerSocketChannel.class)
             .option(ChannelOption.SO_BACKLOG, maxConn)//最大客户端连接数
             .option(ChannelOption.SO_REUSEADDR,true)
+            //.option(ChannelOption.TCP_NODELAY,true)
             //.option(ChannelOption.SO_REUSEPORT,true)
             .childHandler(new ChannelInitializer<SocketChannel>() {
             	@Override

@@ -6,9 +6,7 @@ import com.ryubai.sgnf.infoserver.*;
 import com.ryubai.sgnf.scenarioserver.SSCallHandler;
 import com.ryubai.sgnf.scenarioserver.SSOUT;
 import com.ryubai.sgnf.scenarioserver.SSSocketModel;
-import com.ryubai.sgnf.scenarioserver.SSSocketModel.Vec;
 import com.ryubai.sgnf.scenarioserver.ScenarioServer;
-import com.ryubai.sgnf.scenarioserver.TickSender;
 
 import io.netty.channel.ChannelId;
 
@@ -123,6 +121,7 @@ public class ServerExample {
 				SSSocketModel send = new SSSocketModel();
 				send.command = COMMAND_UPDATE_PLAYER;
 				send.vector.add(send.new Vec());
+				//SSOUT.WriteConsole("TICK");
 				return send;
 			}
 			//Íæ¼ÒÁ¬½Ó

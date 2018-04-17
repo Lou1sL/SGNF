@@ -3,7 +3,6 @@ package com.ryubai.sgnf.scenarioserver;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
@@ -12,16 +11,12 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
-		String uuid = ctx.channel().id().asLongText();
-        PlayerPool.addPlayerChannel(uuid, ctx.channel());
 		clientJoin(ctx.channel().id());
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception// 当客户端断开连接的时候触发函数
 	{
-		String uuid = ctx.channel().id().asLongText();
-        PlayerPool.removePlayerChannel(uuid);
 		clientDrop(ctx.channel().id());
 	}
 
@@ -47,14 +42,19 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	}
 	
 	
-	@Override  
+	@Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {  
-        if (IdleStateEvent.class.isAssignableFrom(evt.getClass())) {
+        if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;  
-            if (event.state() == IdleState.ALL_IDLE)  
-                ctx.channel().write(tickSend(ctx.channel().id()));
+            if (event.state() == IdleState.READER_IDLE){
+            	
+            }
+            
+            ctx.writeAndFlush(tickSend(ctx.channel().id()));
+            
+        }else{
+        	super.userEventTriggered(ctx, evt); 
         }
-        super.userEventTriggered(ctx, evt); 
     }  
 
 	@Override
@@ -72,12 +72,8 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	public SSSocketModel dealMsg(ChannelId id,SSSocketModel msg) {
-		//System.out.println("Client send:" + msg.message.get(0));
 		return null;
-		//return null;
 	}
-	
-	
 	public SSSocketModel tickSend(ChannelId id){
 		return null;
 	}
