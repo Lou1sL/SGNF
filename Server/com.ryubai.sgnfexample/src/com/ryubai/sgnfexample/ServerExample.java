@@ -10,9 +10,7 @@ import com.ryubai.sgnf.scenarioserver.SSSocketModel;
 import com.ryubai.sgnf.scenarioserver.ScenarioServer;
 import com.ryubai.sgnf.scenarioserver.Vector;
 
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
-import io.netty.handler.timeout.IdleStateEvent;
 
 public class ServerExample {
 
@@ -41,9 +39,11 @@ public class ServerExample {
 	private static int COMMAND_UPDATE_PLAYER = 0x1001;
 
 	// 模拟的战场
-	private static class BattleFiled {
-		public static float[] playerA;
-		public static float[] playerB;
+	private static class BattleField {
+		public static ChannelId AID = null;
+		public static ChannelId BID = null;
+		public static Vector playerA = null;
+		public static Vector playerB = null;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -93,30 +93,44 @@ public class ServerExample {
 		// 创建一个场景同步服务器
 		ScenarioServer ss = new ScenarioServer();
 		ss.setCallHandler(new SSCallHandler() {
-			@Override
-			public SSSocketModel dealMsg(ChannelId id, SSSocketModel message) {
-
-				SSOUT.WriteConsole("Client send ID:" + id);
-
-				return message;
-			}
+			
 			@Override
 			public SSSocketModel tickSend(ChannelId id){
 				SSSocketModel sm = new SSSocketModel();
+				
+				
 				sm.command = COMMAND_UPDATE_PLAYER;
-				sm.vector.add(new Vector(-1,0,0,0));
+				if(id==BattleField.AID)sm.vector.add(BattleField.playerB);
+				else if(id==BattleField.BID)sm.vector.add(BattleField.playerA);
+				sm.vector.add(new Vector());
 				return sm;
 			}
-
+			
+			@Override
+			public void tickRcv(ChannelId id, SSSocketModel message) {
+				
+				
+				if(id==BattleField.AID)BattleField.playerA = message.vector.get(0);
+				if(id==BattleField.BID)BattleField.playerB = message.vector.get(0);
+				
+				//SSOUT.WriteConsole("x:"+message.vector.get(0).x+" z:"+message.vector.get(0).z);
+			}
+			
 			// 玩家连接
 			@Override
 			public void clientJoin(ChannelId id) {
+				if(BattleField.AID==null)BattleField.AID = id;
+				else if(BattleField.BID==null)BattleField.BID = id;
+				
 				SSOUT.WriteConsole("Client join ID:" + id);
 			}
 
 			// 玩家断开
 			@Override
 			public void clientDrop(ChannelId id) {
+				if(BattleField.AID==id)BattleField.AID = null;
+				if(BattleField.BID==id)BattleField.BID = null;
+				
 				SSOUT.WriteConsole("Client drop ID:" + id);
 			}
 

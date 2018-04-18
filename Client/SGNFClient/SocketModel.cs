@@ -24,7 +24,7 @@ namespace SGNFClient
         public int Command;
         [ProtoMember(2, IsRequired = true)]
         public int CurrentTick;
-        [ProtoMember(3, IsRequired = false)]
+        [ProtoMember(3, IsRequired = true)]
         public List<int> Message;
         [ProtoMember(4, IsRequired = false)]
         public List<Vec> Vector;

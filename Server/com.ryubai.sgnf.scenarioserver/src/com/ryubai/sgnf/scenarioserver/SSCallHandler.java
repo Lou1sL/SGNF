@@ -3,7 +3,6 @@ package com.ryubai.sgnf.scenarioserver;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
 @ChannelInboundHandlerAdapter.Sharable
@@ -36,8 +35,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 			ctx.writeAndFlush(response);
 		}else
 		{
-			SSSocketModel response = dealMsg(ctx.channel().id(),message);
-			if (response != null)ctx.writeAndFlush(response);
+			tickRcv(ctx.channel().id(),message);
 		}
 	}
 	
@@ -45,13 +43,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	@Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {  
         if (evt instanceof IdleStateEvent) {
-            IdleStateEvent event = (IdleStateEvent) evt;  
-            if (event.state() == IdleState.READER_IDLE){
-            	
-            }
-            
             ctx.writeAndFlush(tickSend(ctx.channel().id()));
-            
         }else{
         	super.userEventTriggered(ctx, evt); 
         }
@@ -71,8 +63,8 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 		SSOUT.WriteConsole("Client drop ID:" + id);
 	}
 
-	public SSSocketModel dealMsg(ChannelId id,SSSocketModel msg) {
-		return null;
+	public void tickRcv(ChannelId id,SSSocketModel msg) {
+		return;
 	}
 	public SSSocketModel tickSend(ChannelId id){
 		return null;

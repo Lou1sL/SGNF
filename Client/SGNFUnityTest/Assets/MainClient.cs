@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class MainClient : MonoBehaviour
 {
-    public Transform player;
+    public Transform playerA;
+    public Transform playerB;
 
     public InputField inputUserName;
     public InputField inputPass;
@@ -56,11 +57,6 @@ public class MainClient : MonoBehaviour
             }
         };
         Client.SendISMsg(model);
-
-        Client.SendSSMsg(new SSSocketModel()
-        {
-            Command = (int)ProtocalCommand.TEST_PLAYER
-        });
     }
 
     public void JoinFirstSS()
@@ -79,13 +75,32 @@ public class MainClient : MonoBehaviour
 
     private void SSCallBack_Test(SSSocketModel _msgData)
     {
-        Debug.Log("aaa"+ _msgData.Vector[0].Tag);
-        player.position = new Vector3(_msgData.Vector[0].X, _msgData.Vector[0].Y, _msgData.Vector[0].Z);
-
         Client.SendSSMsg(new SSSocketModel()
         {
             Command = (int)ProtocalCommand.TEST_PLAYER,
+            Vector = new List<Vec>()
+            {
+                new Vec()
+                {
+                    X = playerA.position.x,
+                    Y = playerA.position.y,
+                    Z = playerA.position.z,
+                }
+            }
         });
+
+        //Debug.Log("aaa"+ _msgData.Vector[0].Tag);
+        playerB.position = new Vector3(_msgData.Vector[0].X, _msgData.Vector[0].Y, _msgData.Vector[0].Z);
     }
 
+    private float speed = 4;
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.W)) playerA.position += Vector3.forward * Time.deltaTime * speed;
+        if (Input.GetKey(KeyCode.S)) playerA.position -= Vector3.forward * Time.deltaTime * speed;
+
+        if (Input.GetKey(KeyCode.A)) playerA.position += Vector3.left * Time.deltaTime * speed;
+        if (Input.GetKey(KeyCode.D)) playerA.position -= Vector3.left * Time.deltaTime * speed;
+    }
 }
