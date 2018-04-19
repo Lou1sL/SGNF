@@ -146,9 +146,9 @@ namespace SGNFClient
                             else
                             {
                                 //锁死消息中心消息队列，并添加数据
-                                lock (MessageCenter.Instance._netMessageDataQueue)
+                                lock (MessageCenter.Instance.ISMessageDataQueue)
                                 {
-                                    MessageCenter.Instance._netMessageDataQueue.Enqueue(DeData);
+                                    MessageCenter.Instance.ISMessageDataQueue.Enqueue(DeData);
                                 }
                             }
                         }

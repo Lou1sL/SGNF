@@ -142,8 +142,11 @@ namespace SGNFClient
                             }
                             else
                             {
-                                byte[] rawData = SocketUtil.SSSerial(frameUpdater(DeData));
-                                Instance.SendMsgBase(rawData);
+                                //锁死消息中心消息队列，并添加数据
+                                lock (MessageCenter.Instance.SSMessageDataQueue)
+                                {
+                                    MessageCenter.Instance.SSMessageDataQueue.Enqueue(DeData);
+                                }
                             }
                         }
                     }

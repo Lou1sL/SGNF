@@ -58,20 +58,28 @@ namespace SGNFClient
 
 
 
-        public static void JoinSS(SocketUtil.SSInfo ssinfo)
+        public static void SSJoin(SocketUtil.SSInfo ssinfo)
         {
             SSSocketManager.Instance.Connect(ssinfo.IP, ssinfo.Port);
         }
 
-        public static void LeaveSS()
+        public static void SSLeave()
         {
             SSSocketManager.Instance.Close();
             tick = -1;
         }
-        
-        public static void SSUpdater(SSTickFrame frameUpdater)
+
+        public static void SendSSMsg(SSSocketModel sm)
         {
-            SSSocketManager.frameUpdater = frameUpdater;
+            if (!IsJoined||!IsConnected) return;
+            byte[] rawData = SocketUtil.SSSerial(sm);
+            SSSocketManager.Instance.SendMsgBase(rawData);
+        }
+
+
+        public static void SSUpdate(SSTickFrame frameUpdater)
+        {
+            MessageCenter.Instance.setSSUpdater(frameUpdater);
         }
     }
 }
