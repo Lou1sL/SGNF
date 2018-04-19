@@ -36,16 +36,16 @@ namespace SGNFClient
             ISSocketManager.Instance.SendMsgBase(rawData);
         }
         
-        public static void AddISCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
+        public static void AddISMsgRcver<T>(T cmd, ISMessage_Callback_Handler callBack)
         {
             CheckEnum<T>();
-            ISMessageCenter.Instance.addObserver((int)(object)cmd, callBack);
+            MessageCenter.Instance.addISObserver((int)(object)cmd, callBack);
         }
 
-        public static void RemoveISCallBackObserver<T>(T cmd, Callback_NetMessage_Handle callBack)
+        public static void RemoveISMsgRcver<T>(T cmd, ISMessage_Callback_Handler callBack)
         {
             CheckEnum<T>();
-            ISMessageCenter.Instance.removeObserver((int)(object)cmd, callBack);
+            MessageCenter.Instance.removeISObserver((int)(object)cmd, callBack);
         }
 
 
@@ -68,27 +68,10 @@ namespace SGNFClient
             SSSocketManager.Instance.Close();
             tick = -1;
         }
-
-
-        public static void SendSSMsg(SSSocketModel data)
+        
+        public static void SSUpdater(SSTickFrame frameUpdater)
         {
-            if (!IsConnected) return;
-            if (!SSSocketManager.Instance.IsConnceted) return;
-
-            byte[] rawData = SocketUtil.SSSerial(data);
-            SSSocketManager.Instance.SendMsgBase(rawData);
-        }
-
-        public static void AddSSCallBackObserver<T>(T cmd, Callback_SSMessage_Handle callBack)
-        {
-            CheckEnum<T>();
-            SSMessageCenter.Instance.addObserver((int)(object)cmd, callBack);
-        }
-
-        public static void RemoveSSCallBackObserver<T>(T cmd, Callback_SSMessage_Handle callBack)
-        {
-            CheckEnum<T>();
-            SSMessageCenter.Instance.removeObserver((int)(object)cmd, callBack);
+            SSSocketManager.frameUpdater = frameUpdater;
         }
     }
 }
