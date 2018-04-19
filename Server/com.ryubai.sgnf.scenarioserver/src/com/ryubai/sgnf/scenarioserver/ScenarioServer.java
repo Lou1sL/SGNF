@@ -16,6 +16,8 @@ public class ScenarioServer {
 
 	private SSCallHandler callHandler = new SSCallHandler();
 
+	
+	
 	static int tick = 60;
 	private int maxConn = 1024;
 	private int port = 34456;

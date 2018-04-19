@@ -29,14 +29,8 @@ public class MainClient : MonoBehaviour
         Client.SSUpdate(SSUpdate);
     }
 
-    private void OnDisable()
-    {
-        //解绑
-        Client.RemoveISMsgRcver(ProtocalCommand.TEST_LOGIN, ISCallBack_Test);
-    }
     void OnApplicationQuit()
     {
-        
         Client.Disconnect();
     }
     
@@ -72,13 +66,10 @@ public class MainClient : MonoBehaviour
         result.text = _msgData.Message[0];
     }
 
-
-    private Vector3 BUpdatePosition = new Vector3();
-
     private SSSocketModel SSUpdate(SSSocketModel rcv)
     {
         if(rcv.Command == (int)ProtocalCommand.TEST_PLAYER)
-            BUpdatePosition = new Vector3(rcv.Vector[0].X, rcv.Vector[0].Y, rcv.Vector[0].Z);
+            playerB.position = new Vector3(rcv.Vector[0].X, rcv.Vector[0].Y, rcv.Vector[0].Z);
 
         return new SSSocketModel()
         {
@@ -104,8 +95,5 @@ public class MainClient : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A)) playerA.position += Vector3.left * Time.deltaTime * speed;
         if (Input.GetKey(KeyCode.D)) playerA.position -= Vector3.left * Time.deltaTime * speed;
-
-
-        playerB.position = BUpdatePosition;
     }
 }

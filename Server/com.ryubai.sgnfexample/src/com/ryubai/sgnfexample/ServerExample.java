@@ -137,7 +137,7 @@ public class ServerExample {
 		});
 
 		ss.setMaxConn(1024);
-		ss.setTick(60);
+		ss.setTick(120);
 		ss.setPort(ssinfo.get(0).Port);
 		ss.startThread();
 
