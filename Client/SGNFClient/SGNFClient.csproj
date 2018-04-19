@@ -54,9 +54,10 @@
     <Compile Include="SGNFDebug.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IS\ISSocketManager.cs" />
+    <Compile Include="ISSocketManager.cs" />
     <Compile Include="SocketModel.cs" />
-    <Compile Include="SS\SSSocketManager.cs" />
+    <Compile Include="SSSocketManager.cs" />
+    <Compile Include="Utils\MovementPredict.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

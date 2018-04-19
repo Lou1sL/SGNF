@@ -2,6 +2,7 @@
 using UnityEngine;
 using SGNFClient;
 using UnityEngine.UI;
+using SGNFClient.Utils;
 
 public class MainClient : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class MainClient : MonoBehaviour
     public InputField inputUserName;
     public InputField inputPass;
     public Text result;
+    public Text CrntTick;
+    public Text CrntFrame;
 
+
+    private int frm = 0;
     /// <summary>
     /// 0xF000-0xFFFF是保留报文格式，仅内部使用。
     /// </summary>
@@ -66,10 +71,16 @@ public class MainClient : MonoBehaviour
         result.text = _msgData.Message[0];
     }
 
+    private Vector3 newb = new Vector3();
+    //根据服务器的帧率(tick rate)调用的Update
     private SSSocketModel SSUpdate(SSSocketModel rcv)
     {
         if(rcv.Command == (int)ProtocalCommand.TEST_PLAYER)
-            playerB.position = new Vector3(rcv.Vector[0].X, rcv.Vector[0].Y, rcv.Vector[0].Z);
+        {
+            newb = new Vector3(rcv.Vector[0].X, rcv.Vector[0].Y, rcv.Vector[0].Z);
+            CrntTick.text = "TICK NO. "+rcv.CurrentTick;
+        }
+            
 
         return new SSSocketModel()
         {
@@ -90,10 +101,18 @@ public class MainClient : MonoBehaviour
 
     private void Update()
     {
+        frm++;
+        CrntFrame.text = frm + "    "+Time.deltaTime;
+
         if (Input.GetKey(KeyCode.W)) playerA.position += Vector3.forward * Time.deltaTime * speed;
         if (Input.GetKey(KeyCode.S)) playerA.position -= Vector3.forward * Time.deltaTime * speed;
 
         if (Input.GetKey(KeyCode.A)) playerA.position += Vector3.left * Time.deltaTime * speed;
         if (Input.GetKey(KeyCode.D)) playerA.position -= Vector3.left * Time.deltaTime * speed;
+
+        //插值优化流畅度
+        playerB.position = MovementPredict.Predictor(playerB.position, newb, Time.deltaTime);
+        //不优化
+        //playerB.position = newb;
     }
 }

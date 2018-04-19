@@ -10,13 +10,20 @@ namespace SGNFClient
     public delegate void ISMessage_Callback_Handler(ISSocketModel data);
     public delegate SSSocketModel SSTickFrame(SSSocketModel data);
 
+
+
     public class MessageCenter : SingletonMonoBehaviour<MessageCenter>
     {
+        
+        //IS
         private Dictionary<int, ISMessage_Callback_Handler> ISMessage_HandlerList = new Dictionary<int, ISMessage_Callback_Handler>();
         internal Queue<ISSocketModel> ISMessageDataQueue = new Queue<ISSocketModel>();
-
+        //SS
         internal SSTickFrame tickFrameUpdater = null;
         internal Queue<SSSocketModel> SSMessageDataQueue = new Queue<SSSocketModel>();
+        private int currentTick = 0;
+        internal float timeFromLastTick = 0;
+        
 
         //添加IS网络事件观察者
         internal void addISObserver(int protocalType, ISMessage_Callback_Handler callback)
@@ -54,6 +61,8 @@ namespace SGNFClient
 
         void Update()
         {
+            if(Client.IsJoined)timeFromLastTick += Time.deltaTime;
+
             while (ISMessageDataQueue.Count > 0)
             {
                 lock (ISMessageDataQueue)
@@ -73,7 +82,12 @@ namespace SGNFClient
                     SSSocketModel tmpSSMessageData = SSMessageDataQueue.Dequeue();
                     if (tickFrameUpdater != null)
                     {
-                        byte[] rawData = SocketUtil.SSSerial(tickFrameUpdater(tmpSSMessageData));
+                        timeFromLastTick = 0;
+
+                        SSSocketModel snd = tickFrameUpdater(tmpSSMessageData);
+                        snd.CurrentTick = currentTick;
+
+                        byte[] rawData = SocketUtil.SSSerial(snd);
                         SSSocketManager.Instance.SendMsgBase(rawData);
                     }
                 }

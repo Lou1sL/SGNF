@@ -7,6 +7,9 @@ import io.netty.handler.timeout.IdleStateEvent;
 
 @ChannelInboundHandlerAdapter.Sharable
 public class SSCallHandler extends ChannelInboundHandlerAdapter {
+	
+	private int currentTick = 0;
+	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
@@ -43,7 +46,12 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	@Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {  
         if (evt instanceof IdleStateEvent) {
-            ctx.writeAndFlush(tickSend(ctx.channel().id()));
+        	
+        	SSSocketModel snd = tickSend(ctx.channel().id());
+        	snd.currentTick = currentTick;
+        	currentTick++;
+            ctx.writeAndFlush(snd);
+            
         }else{
         	super.userEventTriggered(ctx, evt); 
         }

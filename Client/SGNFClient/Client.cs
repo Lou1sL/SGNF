@@ -11,6 +11,13 @@ namespace SGNFClient
         public static bool IsJoined => SSSocketManager.Instance.IsConnceted;
         internal static int tick = -1;
         public static int Tick => tick;
+        
+
+        internal static float latency = 0;
+        public static float Latency => latency;
+
+
+
 
         public static void Connect(string IP, int Port)
         {

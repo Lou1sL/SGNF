@@ -137,24 +137,11 @@ public class ServerExample {
 		});
 
 		ss.setMaxConn(1024);
-		ss.setTick(120);
+		ss.setTick(10);
 		ss.setPort(ssinfo.get(0).Port);
 		ss.startThread();
 
-		// 监听输入，进行一些有意思的测试
-		Scanner scanner = new Scanner(System.in);
-		while (true) {
-			String str = scanner.nextLine();
-			if (str.equals("q")) {
-				is.shut();
-				ss.shut();
-				break;
-			} else {
-				// 比如这里修改了密码
-				ServerExample.USERIDENTITY.Pass = str;
-			}
-		}
-		scanner.close();
+		while(true){}
 	}
 
 }
