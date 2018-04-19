@@ -8,7 +8,7 @@ using UnityStandardUtils;
 namespace SGNFClient
 {
     public delegate void ISMessage_Callback_Handler(ISSocketModel data);
-    public delegate void SSTickFrame(SSSocketModel data);
+    public delegate SSSocketModel SSTickFrame(SSSocketModel data);
 
     public class MessageCenter : SingletonMonoBehaviour<MessageCenter>
     {
@@ -73,7 +73,8 @@ namespace SGNFClient
                     SSSocketModel tmpSSMessageData = SSMessageDataQueue.Dequeue();
                     if (tickFrameUpdater != null)
                     {
-                        tickFrameUpdater(tmpSSMessageData);
+                        byte[] rawData = SocketUtil.SSSerial(tickFrameUpdater(tmpSSMessageData));
+                        SSSocketManager.Instance.SendMsgBase(rawData);
                     }
                 }
             }

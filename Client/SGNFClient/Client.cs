@@ -69,13 +69,6 @@ namespace SGNFClient
             tick = -1;
         }
 
-        public static void SendSSMsg(SSSocketModel sm)
-        {
-            if (!IsJoined||!IsConnected) return;
-            byte[] rawData = SocketUtil.SSSerial(sm);
-            SSSocketManager.Instance.SendMsgBase(rawData);
-        }
-
 
         public static void SSUpdate(SSTickFrame frameUpdater)
         {
