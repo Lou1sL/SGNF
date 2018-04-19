@@ -7,15 +7,18 @@ using UnityStandardUtils;
 
 namespace SGNFClient
 {
-    public delegate void Callback_NetMessage_Handle(ISSocketModel data);
+    public delegate void ISMessage_Callback_Handler(ISSocketModel data);
+    public delegate SSSocketModel SSTickFrame(SSSocketModel data);
 
-    public class ISMessageCenter : SingletonMonoBehaviour<ISMessageCenter>
+    public class MessageCenter : SingletonMonoBehaviour<MessageCenter>
     {
-        private Dictionary<int, Callback_NetMessage_Handle> _netMessage_EventList = new Dictionary<int, Callback_NetMessage_Handle>();
+        private Dictionary<int, ISMessage_Callback_Handler> _netMessage_EventList = new Dictionary<int, ISMessage_Callback_Handler>();
         internal Queue<ISSocketModel> _netMessageDataQueue = new Queue<ISSocketModel>();
 
+        internal SSTickFrame tickFrameUpdater = null;
+
         //添加网络事件观察者
-        internal void addObserver(int protocalType, Callback_NetMessage_Handle callback)
+        internal void addISObserver(int protocalType, ISMessage_Callback_Handler callback)
         {
             if (_netMessage_EventList.ContainsKey(protocalType))
             {
@@ -30,7 +33,7 @@ namespace SGNFClient
             }
         }
         //删除网络事件观察者
-        internal void removeObserver(int protocalType, Callback_NetMessage_Handle callback)
+        internal void removeISObserver(int protocalType, ISMessage_Callback_Handler callback)
         {
             if (_netMessage_EventList.ContainsKey(protocalType))
             {
@@ -41,6 +44,8 @@ namespace SGNFClient
                 }
             }
         }
+
+
 
         void Update()
         {

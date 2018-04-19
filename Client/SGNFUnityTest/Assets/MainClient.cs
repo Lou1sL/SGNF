@@ -25,15 +25,16 @@ public class MainClient : MonoBehaviour
     {
         //绑定数据包发送后的服务器回调处理函数
         Client.AddISCallBackObserver(ProtocalCommand.TEST_LOGIN, ISCallBack_Test);
-        Client.AddSSCallBackObserver(ProtocalCommand.TEST_PLAYER, SSCallBack_Test);
         Client.Connect("192.168.1.102", 9999);
+
+
+        Client.SSUpdater(SSUpdate);
     }
 
     private void OnDisable()
     {
         //解绑
         Client.RemoveISCallBackObserver(ProtocalCommand.TEST_LOGIN, ISCallBack_Test);
-        Client.RemoveSSCallBackObserver(ProtocalCommand.TEST_PLAYER, SSCallBack_Test);
     }
     void OnApplicationQuit()
     {
@@ -72,10 +73,15 @@ public class MainClient : MonoBehaviour
     {
         result.text = _msgData.Message[0];
     }
+    
 
-    private void SSCallBack_Test(SSSocketModel _msgData)
+
+    private SSSocketModel SSUpdate(SSSocketModel rcv)
     {
-        Client.SendSSMsg(new SSSocketModel()
+        if(rcv.Command == (int)ProtocalCommand.TEST_PLAYER)
+        playerB.position = new Vector3(rcv.Vector[0].X, rcv.Vector[0].Y, rcv.Vector[0].Z);
+
+        return new SSSocketModel()
         {
             Command = (int)ProtocalCommand.TEST_PLAYER,
             Vector = new List<Vec>()
@@ -87,10 +93,7 @@ public class MainClient : MonoBehaviour
                     Z = playerA.position.z,
                 }
             }
-        });
-
-        //Debug.Log("aaa"+ _msgData.Vector[0].Tag);
-        playerB.position = new Vector3(_msgData.Vector[0].X, _msgData.Vector[0].Y, _msgData.Vector[0].Z);
+        };
     }
 
     private float speed = 4;
