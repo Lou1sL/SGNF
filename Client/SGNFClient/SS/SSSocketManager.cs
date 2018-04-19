@@ -9,9 +9,6 @@ using UnityStandardUtils;
 
 namespace SGNFClient
 {
-    
-    
-
     internal class SSSocketManager : Singleton<SSSocketManager>
     {
         private bool _isConnected = false;
@@ -24,7 +21,9 @@ namespace SGNFClient
         byte[] _tmpReceiveBuff = new byte[4096];
         SocketUtil.DataBuffer _databuffer = new SocketUtil.DataBuffer();
         byte[] _socketData = new byte[0];
-        
+
+
+
 
         /// <summary>
         /// 连接服务器
@@ -78,12 +77,10 @@ namespace SGNFClient
 
                 SGNFDebug.Log("ScenarioServer connected!");
                 SGNFDebug.Log("Requesting tick!");
-                
-                byte[] rawData = SocketUtil.SSSerial(new SSSocketModel()
+                Client.SendSSMsg(new SSSocketModel()
                 {
                     Command = (int)SocketUtil.InternalCommand.TICK,
                 });
-                Instance.SendMsgBase(rawData);
             }
             catch (Exception _e)
             {
@@ -142,8 +139,11 @@ namespace SGNFClient
                             }
                             else
                             {
-                                byte[] rawData = SocketUtil.SSSerial(frameUpdater(DeData));
-                                Instance.SendMsgBase(rawData);
+                                //锁死消息中心消息队列，并添加数据
+                                lock (SSMessageCenter.Instance._ssMessageDataQueue)
+                                {
+                                    SSMessageCenter.Instance._ssMessageDataQueue.Enqueue(DeData);
+                                }
                             }
                         }
                     }
