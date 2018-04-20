@@ -3,6 +3,7 @@ using ProtoBuf;
 using System;
 using System.IO;
 using System.Net.Sockets;
+using UnityEngine;
 
 namespace SGNFClient
 {
@@ -21,13 +22,13 @@ namespace SGNFClient
     public class SSSocketModel
     {
         [ProtoMember(1, IsRequired = true)]
-        public int Command;
+        public int Command = -1;
         [ProtoMember(2, IsRequired = true)]
-        public int CurrentTick;
+        public int CurrentTick = 0;
         [ProtoMember(3, IsRequired = true)]
-        public List<int> Message;
+        public List<int> Message = new List<int>();
         [ProtoMember(4, IsRequired = false)]
-        public List<Vec> Vector;
+        public List<Vec> Vector = new List<Vec>();
 
     }
     
@@ -35,13 +36,27 @@ namespace SGNFClient
     public class Vec
     {
         [ProtoMember(1, IsRequired = true)]
-        public int Tag;
+        public int Tag = -1;
         [ProtoMember(2, IsRequired = true)]
-        public float X;
+        public float X = 0;
         [ProtoMember(3, IsRequired = true)]
-        public float Y;
+        public float Y = 0;
         [ProtoMember(4, IsRequired = false)]
-        public float Z;
+        public float Z = 0;
+
+
+        public Vec() { }
+        public Vec(int t,Vector3 v)
+        {
+            Tag = t;
+            X = v.x;
+            Y = v.y;
+            Z = v.z;
+        }
+        public Vector3 ToVector3()
+        {
+            return new Vector3(X, Y, Z);
+        }
     }
 
 

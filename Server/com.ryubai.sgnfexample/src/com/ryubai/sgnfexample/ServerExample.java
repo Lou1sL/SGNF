@@ -13,27 +13,20 @@ import com.ryubai.sgnf.scenarioserver.Vector;
 import io.netty.channel.ChannelId;
 
 public class ServerExample {
-
-	// ----------------------------------------------------------IS
-
+	
 	// 模拟登录的指令
 	private static int COMMAND_TEST_LOGIN = 0x1000;
 
 	// 模拟登录的数据
-	private static class USERIDENTITY {
-		public static String Name = "MyName";
-		public static String Pass = "12345678";
-	}
-
+	public static String UserName = "MyName";
+	public static String Pass = "12345678";
+	
 	// 给IS配置的SS信息
-	@SuppressWarnings("serial")
 	private static ArrayList<SSInfo> ssinfo = new ArrayList<SSInfo>() {
 		{
 			add(new SSInfo("ss0", "192.168.1.102", 9876));
 		}
 	};
-
-	// ----------------------------------------------------------SS
 
 	// 模拟更新玩家位置的指令
 	private static int COMMAND_UPDATE_PLAYER = 0x1001;
@@ -42,8 +35,13 @@ public class ServerExample {
 	private static class BattleField {
 		public static ChannelId AID = null;
 		public static ChannelId BID = null;
-		public static Vector playerA = null;
-		public static Vector playerB = null;
+		
+		public static Vector playerA = new Vector();
+		public static Vector playerB = new Vector();
+		
+		//以下是错误用法！！！因为protobuf在传输时会把null压缩没，导致List后面的部分错位
+		//public static Vector playerA = null;
+		//public static Vector playerB = null;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -52,7 +50,6 @@ public class ServerExample {
 		InfoServer is = new InfoServer();
 		is.setSSInfo(ssinfo);
 		is.setCallHandler(new ISCallHandler() {
-
 			// 这个函数处理玩家发来的数据
 			@Override
 			public ISSocketModel dealMsg(ChannelId id, ISSocketModel message) {
@@ -61,8 +58,8 @@ public class ServerExample {
 				if (message.command == COMMAND_TEST_LOGIN) {
 					response.command = COMMAND_TEST_LOGIN;
 
-					if (message.message.get(0).equals(ServerExample.USERIDENTITY.Name)
-							&& message.message.get(1).equals(ServerExample.USERIDENTITY.Pass)) {
+					if (message.message.get(0).equals(UserName)
+							&& message.message.get(1).equals(Pass)) {
 						response.message.set(0, "OK!");
 					} else {
 						response.message.set(0, "NOPE!");
@@ -83,17 +80,17 @@ public class ServerExample {
 			public void clientDrop(ChannelId id) {
 				ISOUT.WriteConsole("Client drop ID:" + id);
 			}
-
 		});
 		is.setMaxConn(1024);
 		is.setPort(9999);
-		// 如果是start()函数则是同步执行，那程序就堵塞了。。。
+		// 如果是start()函数则是同步执行堵塞
 		is.startThread();
 
 		// 创建一个场景同步服务器
 		ScenarioServer ss = new ScenarioServer();
 		ss.setCallHandler(new SSCallHandler() {
 			
+			//每tick调用一次
 			@Override
 			public SSSocketModel tickSend(ChannelId id){
 				SSSocketModel sm = new SSSocketModel();
@@ -105,7 +102,7 @@ public class ServerExample {
 				sm.vector.add(new Vector());
 				return sm;
 			}
-			
+			//tick接收
 			@Override
 			public void tickRcv(ChannelId id, SSSocketModel message) {
 				
@@ -137,7 +134,7 @@ public class ServerExample {
 		});
 
 		ss.setMaxConn(1024);
-		ss.setTick(10);
+		ss.setTick(60);
 		ss.setPort(ssinfo.get(0).Port);
 		ss.startThread();
 

@@ -8,18 +8,20 @@ namespace SGNFClient.Utils
 {
     public static class MovementPredict
     {
-        public static Vector3 Predictor(Vector3 local, Vector3 newone, float dt)
+
+        public static Vector3 Predictor(Vector3 local, Vector3 newone)
         {
             if (!Client.IsConnected || !Client.IsJoined) return local;
 
-            if (dt >= 1.0f / Client.Tick)
+            //服务器刷新频率与帧率相等或更低就不用平滑了
+            if (MessageCenter.Instance.delatT >= 1.0f / Client.Tick)
             {
                 local = newone;
                 return newone;
             }
 
             Vector3 dist = newone - local;
-            return local + (dt/(1.0f / Client.Tick)) * dist;
+            return local + (MessageCenter.Instance.delatT / (1.0f / Client.Tick)) * dist;
         }
 
     }

@@ -25,10 +25,9 @@ namespace SGNFClient
         }
         public static void Disconnect()
         {
-            SSSocketManager.Instance.Close();
+            SSLeave();
             ISSocketManager.Instance.Close();
             allSSInfo.Clear();
-            tick = -1;
         }
 
         /// <summary>
@@ -69,11 +68,23 @@ namespace SGNFClient
         {
             SSSocketManager.Instance.Connect(ssinfo.IP, ssinfo.Port);
         }
+        public static void SSJoin(string tag)
+        {
+            foreach(SocketUtil.SSInfo inf in allSSInfo)
+            {
+                if(inf.Tag == tag)
+                {
+                    SSSocketManager.Instance.Connect(inf.IP, inf.Port);
+                    break;
+                }
+            }
+        }
 
         public static void SSLeave()
         {
             SSSocketManager.Instance.Close();
             tick = -1;
+            MessageCenter.Instance.SSMessageDataBuffer.Clear();
         }
 
 
