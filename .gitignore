@@ -7,8 +7,8 @@
 # /Client/Lib/
 
 # Server Build
-/Server/com.ryubai.infoserver/bin/
-/Server/com.ryubai.scenarioserver/bin/
+/Server/com.ryubai.sgnf.infoserver/bin/
+/Server/com.ryubai.sgnf.scenarioserver/bin/
 /Server/com.ryubai.sgnfexample/bin/
 
 /Server/com.ryubai.sgnf.gameexample/

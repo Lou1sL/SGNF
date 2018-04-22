@@ -38,6 +38,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 			ctx.writeAndFlush(response);
 		}else
 		{
+			//SSRecorder.RecordRcvData.put(message.currentTick, message);
 			tickRcv(ctx.channel().id(),message);
 		}
 	}
@@ -50,6 +51,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
         	SSSocketModel snd = tickSend(ctx.channel().id());
         	snd.currentTick = currentTick;
         	currentTick++;
+        	//SSRecorder.RecordSendData.put(currentTick, snd);
             ctx.writeAndFlush(snd);
             
         }else{

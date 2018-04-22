@@ -2,7 +2,6 @@
 using UnityEngine;
 using SGNFClient;
 using UnityEngine.UI;
-using SGNFClient.Utils;
 using System;
 
 public class MainClient : MonoBehaviour
@@ -16,6 +15,8 @@ public class MainClient : MonoBehaviour
     public Text result;
 
     public Text testRes;
+
+    public Text ping;
 
     public InputField sstag;
 
@@ -46,7 +47,25 @@ public class MainClient : MonoBehaviour
     {
         //绑定数据包发送后的服务器回调处理函数
         Client.AddISMsgRcver(ProtocalCommand.TEST_LOGIN, ISCallBack_Test);
-        Client.SSUpdate(SSUpdate);
+
+        //每tick调用的SSUpdate函数
+        Client.SSUpdate(delegate (SSSocketModel rcv)
+        {
+            if (rcv.Command == (int)ProtocalCommand.TEST_PLAYER)
+            {
+                local = playerB.position;
+                newb = rcv.Vector[0].ToVector3();
+            }
+
+            return new SSSocketModel()
+            {
+                Command = (int)ProtocalCommand.TEST_PLAYER,
+                Vector = new List<Vec>()
+                {
+                    new Vec(-1,playerA.position),
+                }
+            };
+        });
     }
 
     void OnApplicationQuit()
@@ -99,49 +118,42 @@ public class MainClient : MonoBehaviour
         result.text = _msgData.Message[0];
     }
 
-    private Vector3 newb = new Vector3();
-    //根据服务器的帧率(tick rate)调用的Update
-    private SSSocketModel SSUpdate(SSSocketModel rcv)
-    {
-        if(rcv.Command == (int)ProtocalCommand.TEST_PLAYER)
-        {
-            newb = rcv.Vector[0].ToVector3();
-        }
-
-
-        return new SSSocketModel()
-        {
-            Command = (int)ProtocalCommand.TEST_PLAYER,
-            Vector = new List<Vec>()
-            {
-                new Vec(-1,playerA.position),
-            }
-        };
-    }
+    
 
     private float speed = 4;
 
+
+    private Vector3 local = new Vector3();
+    private Vector3 newb = new Vector3();
+
     private void Update()
     {
-        if(Client.AllSSInfo.Count>0) ssinfo.text = Client.AllSSInfo[0].ToString();
-
-        if (Input.GetKey(KeyCode.W)) playerA.position += Vector3.forward * Time.deltaTime * speed;
-        if (Input.GetKey(KeyCode.S)) playerA.position -= Vector3.forward * Time.deltaTime * speed;
-
-        if (Input.GetKey(KeyCode.A)) playerA.position += Vector3.left * Time.deltaTime * speed;
-        if (Input.GetKey(KeyCode.D)) playerA.position -= Vector3.left * Time.deltaTime * speed;
+        
 
         //插值优化流畅度
-        playerB.position = MovementPredict.Predictor(playerB.position, newb);
+        playerB.position = SGNFUtils.SmoothVec(local,newb);
         //不优化
         //playerB.position = newb;
 
 
+
+        //按钮启用
         conn.interactable = !Client.IsConnected;
         disconn.interactable = Client.IsConnected;
         testLogin.interactable = Client.IsConnected;
 
         connss.interactable = !Client.IsJoined && Client.IsConnected;
         disconnss.interactable = Client.IsJoined && Client.IsConnected;
+
+        ping.text = "PING "+Client.Latency + "";
+
+        //控制
+        if (Client.AllSSInfo.Count > 0) ssinfo.text = Client.AllSSInfo[0].ToString();
+
+        if (Input.GetKey(KeyCode.W)) playerA.position += Vector3.forward * Time.deltaTime * speed;
+        if (Input.GetKey(KeyCode.S)) playerA.position -= Vector3.forward * Time.deltaTime * speed;
+
+        if (Input.GetKey(KeyCode.A)) playerA.position += Vector3.left * Time.deltaTime * speed;
+        if (Input.GetKey(KeyCode.D)) playerA.position -= Vector3.left * Time.deltaTime * speed;
     }
 }

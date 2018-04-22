@@ -21,12 +21,13 @@ namespace SGNFClient
         //SS
         internal SSTickFrame tickFrameUpdater = null;
         internal Queue<SSSocketModel> SSMessageDataQueue = new Queue<SSSocketModel>();
-        //每一个DeQueue的SSMessage都会扔进去的List
-        internal List<SSSocketModel> SSMessageDataBuffer = new List<SSSocketModel>();
+        
+
         internal int currentTick = 0;
         internal float timeFromLastTick = 0;
 
         internal float delatT = 0;
+
 
         //添加IS网络事件观察者
         internal void addISObserver(int protocalType, ISMessage_Callback_Handler callback)
@@ -62,6 +63,9 @@ namespace SGNFClient
             tickFrameUpdater = frameUpdater;
         }
 
+
+        float ping = 0f;
+
         void Update()
         {
             delatT = Time.deltaTime;
@@ -80,12 +84,22 @@ namespace SGNFClient
                 }
             }
 
+
+            //计算延迟
+            if (SSMessageDataQueue.Count <= 0) ping += delatT;
+            else
+            {
+                Client.latency = ping;
+                ping = 0f;
+            }
+
+
             while (SSMessageDataQueue.Count > 0)
             {
+
                 lock (SSMessageDataQueue)
                 {
                     SSSocketModel tmpSSMessageData = SSMessageDataQueue.Dequeue();
-                    SSMessageDataBuffer.Add(tmpSSMessageData);
                     currentTick = tmpSSMessageData.CurrentTick;
                     if (tickFrameUpdater != null)
                     {
@@ -93,14 +107,19 @@ namespace SGNFClient
 
                         SSSocketModel snd = tickFrameUpdater(tmpSSMessageData);
                         snd.CurrentTick = currentTick;
-
+                        
                         byte[] rawData = SocketUtil.SSSerial(snd);
                         SSSocketManager.Instance.SendMsgBase(rawData);
                     }
                 }
             }
 
+
             
+
+
+
+
         }
 
 

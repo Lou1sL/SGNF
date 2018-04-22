@@ -142,11 +142,16 @@ namespace SGNFClient
                             }
                             else
                             {
+                                lock (SSRecorder.Instance.RecieveDataBuffer)
+                                {
+                                    SSRecorder.Instance.RecieveDataBuffer.Add(DeData.CurrentTick, DeData);
+                                }
                                 //锁死消息中心消息队列，并添加数据
                                 lock (MessageCenter.Instance.SSMessageDataQueue)
                                 {
                                     MessageCenter.Instance.SSMessageDataQueue.Enqueue(DeData);
                                 }
+                                
                             }
                         }
                     }

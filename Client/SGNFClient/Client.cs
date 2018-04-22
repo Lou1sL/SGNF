@@ -84,7 +84,7 @@ namespace SGNFClient
         {
             SSSocketManager.Instance.Close();
             tick = -1;
-            MessageCenter.Instance.SSMessageDataBuffer.Clear();
+            SSRecorder.Instance.RecieveDataBuffer.Clear();
         }
 
 
