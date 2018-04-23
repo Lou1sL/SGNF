@@ -51,11 +51,11 @@ public class MainClient : MonoBehaviour
         //每tick调用的SSUpdate函数
         Client.SSUpdate(delegate (SSSocketModel rcv)
         {
-            if (rcv.Command == (int)ProtocalCommand.TEST_PLAYER)
-            {
-                local = playerB.position;
-                newb = rcv.Vector[0].ToVector3();
-            }
+            //if (rcv.Command == (int)ProtocalCommand.TEST_PLAYER)
+            //{
+            //    local = playerB.position;
+            //    newb = rcv.Vector[0].ToVector3();
+            //}
 
             return new SSSocketModel()
             {
@@ -131,7 +131,7 @@ public class MainClient : MonoBehaviour
         
 
         //插值优化流畅度
-        playerB.position = SGNFUtils.SmoothVec(local,newb);
+        //playerB.position = SGNFUtils.SmoothVec(local,newb);
         //不优化
         //playerB.position = newb;
 

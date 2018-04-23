@@ -9,7 +9,7 @@ namespace SGNFClient
 {
     public delegate void ISMessage_Callback_Handler(ISSocketModel data);
     public delegate SSSocketModel SSTickFrame(SSSocketModel data);
-
+    public delegate void NetTransformTickUpdate(SSSocketModel data);
 
 
     public class MessageCenter : SingletonMonoBehaviour<MessageCenter>
@@ -27,6 +27,10 @@ namespace SGNFClient
         internal float timeFromLastTick = 0;
 
         internal float delatT = 0;
+
+        //NetTransform
+        internal NetTransformTickUpdate NetTransformTickCall = null;
+
 
 
         //添加IS网络事件观察者
@@ -57,7 +61,7 @@ namespace SGNFClient
             }
         }
 
-        //
+        //用户自定义SS帧消息处理器
         internal void setSSUpdater(SSTickFrame frameUpdater)
         {
             tickFrameUpdater = frameUpdater;
@@ -101,6 +105,11 @@ namespace SGNFClient
                 {
                     SSSocketModel tmpSSMessageData = SSMessageDataQueue.Dequeue();
                     currentTick = tmpSSMessageData.CurrentTick;
+
+
+                    NetTransformTickCall?.Invoke(tmpSSMessageData);
+
+
                     if (tickFrameUpdater != null)
                     {
                         timeFromLastTick = 0;
