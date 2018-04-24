@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SGNFClient.UnityScript;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,7 +75,7 @@ namespace SGNFClient
         {
             delatT = Time.deltaTime;
 
-            if(Client.IsJoined)timeFromLastTick += Time.deltaTime;
+            if(SSSocketManager.Instance.IsConnceted) timeFromLastTick += Time.deltaTime;
 
             while (ISMessageDataQueue.Count > 0)
             {
@@ -93,7 +94,7 @@ namespace SGNFClient
             if (SSMessageDataQueue.Count <= 0) ping += delatT;
             else
             {
-                Client.latency = ping;
+                NetManager.Instance.latency = ping;
                 ping = 0f;
             }
 

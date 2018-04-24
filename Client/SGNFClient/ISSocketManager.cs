@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SGNFClient.UnityScript;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -77,10 +78,11 @@ namespace SGNFClient
 
                 SGNFDebug.Log("InfoServer connected!");
                 SGNFDebug.Log("Requesting ScenarioServer list...");
-                Client.SendISMsg(new ISSocketModel()
+                byte[] rawData = SocketUtil.ISSerial(new ISSocketModel()
                 {
                     Command = (int)SocketUtil.InternalCommand.SSINFO,
                 });
+                Instance.SendMsgBase(rawData);
             }
             catch (Exception _e)
             {
@@ -129,10 +131,10 @@ namespace SGNFClient
                                     int num = Convert.ToInt32(DeData.Message[0]);
                                     if (num > 0)
                                     {
-                                        Client.allSSInfo.Clear();
+                                        NetManager.Instance.allSSInfo.Clear();
                                         for(int i = 0; i < num; i++)
                                         {
-                                            Client.allSSInfo.Add(new SocketUtil.SSInfo()
+                                            NetManager.Instance.allSSInfo.Add(new SocketUtil.SSInfo()
                                             {
                                                 Tag = DeData.Message[i * 3 + 1],
                                                 IP = DeData.Message[i * 3 + 2],
@@ -140,7 +142,7 @@ namespace SGNFClient
                                             });
                                         }
                                     }
-                                    SGNFDebug.ListLog("Got " + num + " row of SS from server",Client.allSSInfo);
+                                    SGNFDebug.ListLog("Got " + num + " row of SS from server", NetManager.Instance.allSSInfo);
                                 }
                             }
                             else
@@ -174,6 +176,7 @@ namespace SGNFClient
         {
             if (clientSocket == null || !clientSocket.Connected)
             {
+                SGNFDebug.Log("InfoServer didn't connected at all!");
                 return;
             }
 
@@ -208,7 +211,10 @@ namespace SGNFClient
         internal void Close()
         {
             if (!_isConnected)
+            {
                 return;
+            }
+                
 
             _isConnected = false;
 
@@ -223,6 +229,8 @@ namespace SGNFClient
                 clientSocket.Close();
                 clientSocket = null;
             }
+
+            SGNFDebug.Log("InfoServer disconnected!");
         }
     }
 

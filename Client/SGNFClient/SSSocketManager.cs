@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SGNFClient.UnityScript;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -131,7 +132,7 @@ namespace SGNFClient
                                 {
                                     if (DeData.Message.Count>=1)
                                     {
-                                        Client.tick = DeData.Message[0];
+                                        NetManager.Instance.tick = DeData.Message[0];
                                         SGNFDebug.Log("Got Tick!Which is " + DeData.Message[0]);
                                     }
                                     else
@@ -210,7 +211,10 @@ namespace SGNFClient
         internal void Close()
         {
             if (!_isConnected)
+            {
                 return;
+            }
+                
 
             _isConnected = false;
 
@@ -225,6 +229,8 @@ namespace SGNFClient
                 clientSocket.Close();
                 clientSocket = null;
             }
+
+            SGNFDebug.Log("ScenarioServer disconnected!");
         }
     }
 
