@@ -23,11 +23,8 @@ namespace SGNFClient.UnityScript
             public bool AsyncThis = false;
             
             public int MessagePkgVecPointer = 0;
-            public int Tag = -1;
             public _AsyncType AsyncType = _AsyncType.XYZ;
         }
-
-        public int Command = 0x1001;
 
         public NetVec3 NetPosition = new NetVec3();
         public NetVec3 NetRotation = new NetVec3();
@@ -37,19 +34,20 @@ namespace SGNFClient.UnityScript
         {
             MessageCenter.Instance.ClientTransformCall += delegate (ref SSSocketModel data)
             {
-                if (data.Command != Command) return;
-
                 if (NetPosition.AsyncThis)
                 {
-                    data.Vector[NetPosition.MessagePkgVecPointer] = new Vec(NetPosition.Tag,transform.position);
+                    while (data.Vector.Count < NetPosition.MessagePkgVecPointer+1) data.Vector.Add(new Vec());
+                    data.Vector[NetPosition.MessagePkgVecPointer] = new Vec(-1,transform.position);
                 }
                 if (NetRotation.AsyncThis)
                 {
-                    data.Vector[NetRotation.MessagePkgVecPointer] = new Vec(NetRotation.Tag, transform.eulerAngles);
+                    while (data.Vector.Count < NetRotation.MessagePkgVecPointer+1) data.Vector.Add(new Vec());
+                    data.Vector[NetRotation.MessagePkgVecPointer] = new Vec(-1, transform.eulerAngles);
                 }
                 if (NetScale.AsyncThis)
                 {
-                    data.Vector[NetScale.MessagePkgVecPointer] = new Vec(NetScale.Tag, transform.localScale);
+                    while (data.Vector.Count < NetScale.MessagePkgVecPointer+1) data.Vector.Add(new Vec());
+                    data.Vector[NetScale.MessagePkgVecPointer] = new Vec(-1, transform.localScale);
                 }
 
 

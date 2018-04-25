@@ -276,24 +276,17 @@ MonoBehaviour:
   m_Script: {fileID: -331332074, guid: d8936edbd62ae1740a39dc7b30bd4f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Command: 4097
   NetPosition:
     AsyncThis: 1
-    Smooth: 0
     MessagePkgVecPointer: 0
-    Tag: -1
     AsyncType: 0
   NetRotation:
     AsyncThis: 0
-    Smooth: 0
     MessagePkgVecPointer: 0
-    Tag: -1
     AsyncType: 0
   NetScale:
     AsyncThis: 0
-    Smooth: 0
     MessagePkgVecPointer: 0
-    Tag: -1
     AsyncType: 0
 --- !u!1 &223511918
 GameObject:
@@ -653,7 +646,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1528424983}
+      - m_Target: {fileID: 0}
         m_MethodName: SendMsg2IS
         m_Mode: 1
         m_Arguments:
@@ -976,7 +969,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1528424983}
+      - m_Target: {fileID: 0}
         m_MethodName: ScenarioServerLeave
         m_Mode: 1
         m_Arguments:
@@ -1105,6 +1098,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1022380974}
   - component: {fileID: 1022380975}
+  - component: {fileID: 1022380976}
   m_Layer: 0
   m_Name: NetManager
   m_TagString: Untagged
@@ -1144,6 +1138,22 @@ MonoBehaviour:
     ScenarioServerTag: ss0
   SpawnInfo:
     PlayerPrefeb: {fileID: 0}
+--- !u!114 &1022380976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1022380973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d27a79f9a19418499b7897881fd517f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputUserName: {fileID: 1805490839}
+  inputPass: {fileID: 375999836}
+  result: {fileID: 1089438009}
+  ping: {fileID: 1029214060}
+  playerA: {fileID: 24108127}
 --- !u!1 &1029214058
 GameObject:
   m_ObjectHideFlags: 0
@@ -1294,7 +1304,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1528424983}
+      - m_Target: {fileID: 0}
         m_MethodName: InfoServerConnect
         m_Mode: 1
         m_Arguments:
@@ -1648,7 +1658,6 @@ GameObject:
   - component: {fileID: 1528424980}
   - component: {fileID: 1528424979}
   - component: {fileID: 1528424978}
-  - component: {fileID: 1528424983}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1726,22 +1735,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50.044003, y: 0, z: 0}
---- !u!114 &1528424983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1528424977}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d27a79f9a19418499b7897881fd517f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputUserName: {fileID: 1805490839}
-  inputPass: {fileID: 375999836}
-  result: {fileID: 1089438009}
-  ping: {fileID: 1029214060}
-  playerA: {fileID: 24108127}
 --- !u!1 &1733965626
 GameObject:
   m_ObjectHideFlags: 0
@@ -1818,7 +1811,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1528424983}
+      - m_Target: {fileID: 0}
         m_MethodName: InfoServerDisconnect
         m_Mode: 1
         m_Arguments:
@@ -2148,7 +2141,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1528424983}
+      - m_Target: {fileID: 0}
         m_MethodName: ScenarioServerJoin
         m_Mode: 1
         m_Arguments:
@@ -2391,7 +2384,6 @@ MonoBehaviour:
   m_Script: {fileID: -2131274428, guid: d8936edbd62ae1740a39dc7b30bd4f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Command: 4097
   NetPosition:
     AsyncThis: 1
     Smooth: 1

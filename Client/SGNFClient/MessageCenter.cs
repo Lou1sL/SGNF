@@ -120,7 +120,7 @@ namespace SGNFClient
                         SSSocketModel snd = tickFrameUpdater(tmpSSMessageData);
                         snd.CurrentTick = currentTick;
 
-                        //ClientTransformCall?.Invoke(ref snd);
+                        ClientTransformCall?.Invoke(ref snd);
 
                         byte[] rawData = SocketUtil.SSSerial(snd);
                         SSSocketManager.Instance.SendMsgBase(rawData);

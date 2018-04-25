@@ -26,9 +26,7 @@ namespace SGNFClient.UnityScript
             public int MessagePkgVecPointer = 0;
             public _AsyncType AsyncType = _AsyncType.XYZ;
         }
-
-        public int Command = 0x1001;
-
+        
         public NetVec3 NetPosition = new NetVec3();
         public NetVec3 NetRotation = new NetVec3();
         public NetVec3 NetScale = new NetVec3();
@@ -48,7 +46,6 @@ namespace SGNFClient.UnityScript
         {
              MessageCenter.Instance.ServerTransformCall+=(delegate(SSSocketModel data)
              {
-                 if (data.Command != Command) return;
 
                  if (NetPosition.AsyncThis)
                  {

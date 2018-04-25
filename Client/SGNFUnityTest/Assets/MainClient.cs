@@ -34,14 +34,7 @@ public class MainClient : MonoBehaviour
         //每tick调用的SSUpdate函数,不一定非得有用
         NetManager.Instance.SSUpdate(delegate (SSSocketModel rcv)
         {
-            return new SSSocketModel()
-            {
-                Command = (int)ProtocalCommand.TEST_PLAYER,
-                Vector = new List<Vec>()
-                {
-                    new Vec(-1,playerA.position),
-                }
-            };
+            return new SSSocketModel(){};
         });
     }
 
