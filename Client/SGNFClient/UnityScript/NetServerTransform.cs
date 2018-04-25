@@ -46,7 +46,7 @@ namespace SGNFClient.UnityScript
 
         private void Start()
         {
-             MessageCenter.Instance.NetTransformTickCall+=(delegate(SSSocketModel data)
+             MessageCenter.Instance.ServerTransformCall+=(delegate(SSSocketModel data)
              {
                  if (data.Command != Command) return;
 

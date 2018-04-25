@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 24108126}
   - component: {fileID: 24108125}
   - component: {fileID: 24108124}
+  - component: {fileID: 24108128}
   m_Layer: 0
   m_Name: CubeA
   m_TagString: Untagged
@@ -264,6 +265,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &24108128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 24108123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -331332074, guid: d8936edbd62ae1740a39dc7b30bd4f69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Command: 4097
+  NetPosition:
+    AsyncThis: 1
+    Smooth: 0
+    MessagePkgVecPointer: 0
+    Tag: -1
+    AsyncType: 0
+  NetRotation:
+    AsyncThis: 0
+    Smooth: 0
+    MessagePkgVecPointer: 0
+    Tag: -1
+    AsyncType: 0
+  NetScale:
+    AsyncThis: 0
+    Smooth: 0
+    MessagePkgVecPointer: 0
+    Tag: -1
+    AsyncType: 0
 --- !u!1 &223511918
 GameObject:
   m_ObjectHideFlags: 0

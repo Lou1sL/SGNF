@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MessageCenter.cs" />
+    <Compile Include="UnityScript\NetClientTransform.cs" />
     <Compile Include="UnityScript\NetManager.cs" />
     <Compile Include="UnityScript\NetServerTransform.cs" />
     <Compile Include="SGNFDebug.cs" />
