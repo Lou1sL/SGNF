@@ -1,7 +1,6 @@
 package com.ryubai.sgnf.infoserver;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 @ChannelInboundHandlerAdapter.Sharable
@@ -9,13 +8,13 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
-		clientJoin(ctx.channel().id());
+		clientJoin(ctx.channel().id().asLongText());
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception// 当客户端断开连接的时候触发函数
 	{
-		clientDrop(ctx.channel().id());
+		clientDrop(ctx.channel().id().asLongText());
 	}
 
 	@Override
@@ -44,7 +43,7 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 			
 		}else
 		{
-			ISSocketModel response = dealMsg(ctx.channel().id(),message);
+			ISSocketModel response = dealMsg(ctx.channel().id().asLongText(),message);
 			if (response != null)ctx.writeAndFlush(response);
 		}
 	}
@@ -55,15 +54,15 @@ public class ISCallHandler extends ChannelInboundHandlerAdapter {
 		cause.printStackTrace();
 	}
 
-	public void clientJoin(ChannelId id) {
+	public void clientJoin(String id) {
 		ISOUT.WriteConsole("Client join ID:" + id);
 	}
 
-	public void clientDrop(ChannelId id) {
+	public void clientDrop(String id) {
 		ISOUT.WriteConsole("Client drop ID:" + id);
 	}
 
-	public ISSocketModel dealMsg(ChannelId id,ISSocketModel msg) {
+	public ISSocketModel dealMsg(String id,ISSocketModel msg) {
 		//System.out.println("Client send:" + msg.message.get(0));
 		return msg;
 		//return null;

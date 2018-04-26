@@ -5,10 +5,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/com.ryubai.sgnf.infoserver"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.ryubai.sgnf.scenarioserver"/>
 	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/netty-all-4.1.22.Final.jar"/>
-	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/netty-all-4.1.22.Final-sources.jar"/>
-	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/protostuff-api-1.0.8.jar"/>
-	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/protostuff-collectionschema-1.0.8.jar"/>
-	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/protostuff-core-1.0.8.jar"/>
-	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/protostuff-runtime-1.0.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

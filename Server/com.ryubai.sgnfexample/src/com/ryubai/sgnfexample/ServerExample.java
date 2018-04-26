@@ -1,16 +1,9 @@
 package com.ryubai.sgnfexample;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import com.ryubai.sgnf.infoserver.*;
-import com.ryubai.sgnf.scenarioserver.SSCallHandler;
-import com.ryubai.sgnf.scenarioserver.SSOUT;
-import com.ryubai.sgnf.scenarioserver.SSSocketModel;
-import com.ryubai.sgnf.scenarioserver.ScenarioServer;
-import com.ryubai.sgnf.scenarioserver.Vector;
+import com.ryubai.sgnf.scenarioserver.*;
 
-import io.netty.channel.ChannelId;
 
 public class ServerExample {
 	
@@ -33,8 +26,8 @@ public class ServerExample {
 
 	// 模拟的战场
 	private static class BattleField {
-		public static ChannelId AID = null;
-		public static ChannelId BID = null;
+		public static String AID = "";
+		public static String BID = "";
 		
 		public static Vector playerA = new Vector();
 		public static Vector playerB = new Vector();
@@ -52,7 +45,7 @@ public class ServerExample {
 		is.setCallHandler(new ISCallHandler() {
 			// 这个函数处理玩家发来的数据
 			@Override
-			public ISSocketModel dealMsg(ChannelId id, ISSocketModel message) {
+			public ISSocketModel dealMsg(String id, ISSocketModel message) {
 				ISSocketModel response = new ISSocketModel();
 				response.message.add("");
 				if (message.command == COMMAND_TEST_LOGIN) {
@@ -71,13 +64,13 @@ public class ServerExample {
 
 			// 玩家连接
 			@Override
-			public void clientJoin(ChannelId id) {
+			public void clientJoin(String id) {
 				ISOUT.WriteConsole("Client join ID:" + id);
 			}
 
 			// 玩家断开
 			@Override
-			public void clientDrop(ChannelId id) {
+			public void clientDrop(String id) {
 				ISOUT.WriteConsole("Client drop ID:" + id);
 			}
 		});
@@ -92,41 +85,41 @@ public class ServerExample {
 			
 			//每tick调用一次
 			@Override
-			public SSSocketModel tickSend(ChannelId id){
+			public SSSocketModel tickSend(String id){
 				SSSocketModel sm = new SSSocketModel();
 				
 				
 				sm.command = COMMAND_UPDATE_PLAYER;
-				if(id==BattleField.AID)sm.vector.add(BattleField.playerB);
-				else if(id==BattleField.BID)sm.vector.add(BattleField.playerA);
+				if(id.equals(BattleField.AID))sm.vector.add(BattleField.playerB);
+				else if(id.equals(BattleField.BID))sm.vector.add(BattleField.playerA);
 				sm.vector.add(new Vector());
 				return sm;
 			}
 			//tick接收
 			@Override
-			public void tickRcv(ChannelId id, SSSocketModel message) {
+			public void tickRcv(String id, SSSocketModel message) {
 				
 				
-				if(id==BattleField.AID)BattleField.playerA = message.vector.get(0);
-				if(id==BattleField.BID)BattleField.playerB = message.vector.get(0);
+				if(id.equals(BattleField.AID))BattleField.playerA = message.vector.get(0);
+				if(id.equals(BattleField.BID))BattleField.playerB = message.vector.get(0);
 				
 				//SSOUT.WriteConsole("x:"+message.vector.get(0).x+" z:"+message.vector.get(0).z);
 			}
 			
 			// 玩家连接
 			@Override
-			public void clientJoin(ChannelId id) {
-				if(BattleField.AID==null)BattleField.AID = id;
-				else if(BattleField.BID==null)BattleField.BID = id;
+			public void clientJoin(String id) {
+				if(BattleField.AID.isEmpty())BattleField.AID = id;
+				else if(BattleField.BID.isEmpty())BattleField.BID = id;
 				
 				SSOUT.WriteConsole("Client join ID:" + id);
 			}
 
 			// 玩家断开
 			@Override
-			public void clientDrop(ChannelId id) {
-				if(BattleField.AID==id)BattleField.AID = null;
-				if(BattleField.BID==id)BattleField.BID = null;
+			public void clientDrop(String id) {
+				if(BattleField.AID.equals(id))BattleField.AID = "";
+				if(BattleField.BID.equals(id))BattleField.BID = "";
 				
 				SSOUT.WriteConsole("Client drop ID:" + id);
 			}
@@ -134,7 +127,7 @@ public class ServerExample {
 		});
 
 		ss.setMaxConn(1024);
-		ss.setTick(10);
+		ss.setTick(60);
 		ss.setPort(ssinfo.get(0).Port);
 		ss.startThread();
 

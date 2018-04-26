@@ -1,10 +1,12 @@
 package com.ryubai.sgnf.scenarioserver;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
 
+
+//这里有必要说下，下面的id返回的不是asShortText，因为根据官方文档，asShortText是non-unique的
+//asLongText才是
 @ChannelInboundHandlerAdapter.Sharable
 public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	
@@ -13,13 +15,13 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
-		clientJoin(ctx.channel().id());
+		clientJoin(ctx.channel().id().asLongText());
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception// 当客户端断开连接的时候触发函数
 	{
-		clientDrop(ctx.channel().id());
+		clientDrop(ctx.channel().id().asLongText());
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 		}else
 		{
 			//SSRecorder.RecordRcvData.put(message.currentTick, message);
-			tickRcv(ctx.channel().id(),message);
+			tickRcv(ctx.channel().id().asLongText(),message);
 		}
 	}
 	
@@ -48,7 +50,7 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {  
         if (evt instanceof IdleStateEvent) {
         	
-        	SSSocketModel snd = tickSend(ctx.channel().id());
+        	SSSocketModel snd = tickSend(ctx.channel().id().asLongText());
         	snd.currentTick = currentTick;
         	currentTick++;
         	//SSRecorder.RecordSendData.put(currentTick, snd);
@@ -65,18 +67,18 @@ public class SSCallHandler extends ChannelInboundHandlerAdapter {
 		cause.printStackTrace();
 	}
 
-	public void clientJoin(ChannelId id) {
+	public void clientJoin(String id) {
 		SSOUT.WriteConsole("Client join ID:" + id);
 	}
 
-	public void clientDrop(ChannelId id) {
+	public void clientDrop(String id) {
 		SSOUT.WriteConsole("Client drop ID:" + id);
 	}
 
-	public void tickRcv(ChannelId id,SSSocketModel msg) {
+	public void tickRcv(String id,SSSocketModel msg) {
 		return;
 	}
-	public SSSocketModel tickSend(ChannelId id){
+	public SSSocketModel tickSend(String id){
 		return null;
 	}
 }
