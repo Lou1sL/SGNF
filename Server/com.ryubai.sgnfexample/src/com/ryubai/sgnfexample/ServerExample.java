@@ -45,10 +45,12 @@ public class ServerExample {
 		is.setCallHandler(new ISCallHandler() {
 			// 这个函数处理玩家发来的数据
 			@Override
-			public ISSocketModel dealMsg(String id, ISSocketModel message) {
-				ISSocketModel response = new ISSocketModel();
-				response.message.add("");
+			public void recieveMessage(String id, ISSocketModel message) {
+				
 				if (message.command == COMMAND_TEST_LOGIN) {
+					
+					ISSocketModel response = new ISSocketModel();
+					response.message.add("");
 					response.command = COMMAND_TEST_LOGIN;
 
 					if (message.message.get(0).equals(UserName)
@@ -57,9 +59,9 @@ public class ServerExample {
 					} else {
 						response.message.set(0, "NOPE!");
 					}
-					return response;
-				} else
-					return null;
+					
+					is.sendMessage(id, response);
+				}
 			}
 
 			// 玩家连接

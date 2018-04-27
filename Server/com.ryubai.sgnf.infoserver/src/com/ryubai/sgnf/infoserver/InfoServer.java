@@ -1,8 +1,11 @@
 package com.ryubai.sgnf.infoserver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import io.netty.bootstrap.ServerBootstrap;  
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;   
 import io.netty.channel.ChannelInitializer;   
 import io.netty.channel.ChannelOption;   
@@ -14,7 +17,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class InfoServer {
 	
 	private int port = 23345;
-	static ArrayList<SSInfo> ssinfoList = new ArrayList<SSInfo>();
+	private ArrayList<SSInfo> ssinfoList = new ArrayList<SSInfo>();
 	private ISCallHandler callHandler = new ISCallHandler();
 	private int maxConn = 1024;
 	
@@ -34,6 +37,10 @@ public class InfoServer {
 		port = p;
 	}
 	
+	public void sendMessage(String id,ISSocketModel msg){
+		if(callHandler.PlayerPool.containsKey(id) && msg!=null)callHandler.PlayerPool.get(id).writeAndFlush(msg);
+		else ISOUT.WriteConsole("Unable to sendMessage(),id not exist");
+	}
 	
 	public void start()
     {
@@ -69,6 +76,9 @@ public class InfoServer {
 		}
 	}
 	private void _process(){
+		
+		callHandler.ssinfoList = ssinfoList;
+		
 		EventLoopGroup bossGroup = new NioEventLoopGroup();//Ïß³Ì×é
         EventLoopGroup workGroup = new NioEventLoopGroup();
         try {
