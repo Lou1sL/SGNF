@@ -1,0 +1,154 @@
+package com.ryubai.sgnf.physx.dynamics.actors;
+
+import javax.vecmath.Matrix3f;
+import javax.vecmath.Vector3f;
+
+import com.ryubai.sgnf.physx.Functions;
+import com.ryubai.sgnf.physx.WorldPhysX;
+
+
+/**
+ * NxActor is the main simulation object in the physics SDK. 
+The actor is owned by and contained in a NxScene.
+An actor may optionally encapsulate a dynamic rigid body by setting the body member of the actor's descriptor when it is created. Otherwise the actor will be static (fixed in the world).
+Creation
+Instances of this class are created by calling NxScene::createActor() and deleted with NxScene::releaseActor().
+See NxActorDescBase for a more detailed description of the parameters which can be set when creating an actor.
+ * @author MikL
+ *
+ */
+public abstract class Actor {
+	static int id_counter = 0;
+	int id;
+	String name;
+	Material material;
+	WorldPhysX world;
+	public WorldPhysX getWorld() {
+		return world;
+	}
+	public void setWorld(WorldPhysX world) {
+		this.world = world;
+	}
+	public Material getMaterial() {
+		return material;
+	}
+	public void setMaterial(Material m) {
+		Functions.actorSetMaterial(id, m.getId());	
+		material = m;
+	}
+	/**
+	 * Applies a force (or impulse) defined in the global coordinate frame to the actor. 
+
+	 * @param force_x
+	 * @param force_y
+	 * @param force_z
+	 */
+	public void addForce(float force_x,float force_y,float force_z) {
+		Functions.actorAddForce(id, force_x, force_y, force_z);
+	}
+	/**
+	 * Gets the id of the actor
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	public Matrix3f getRotation() {
+		return new Matrix3f(Functions.actorGetRotation(id));
+	}
+	public void setSolverIterationCounts(int iterations) {
+		Functions.actorSetSolverIterations(id, iterations);
+	}
+	public void setRotation(Matrix3f m) {
+		Functions.actorSetRotation(id,m);
+	}
+	/**
+	 * Creates a new actor. 
+	 *
+	 */
+	public Actor(WorldPhysX world) {
+		//create id
+		id = id_counter++;
+		setWorld(world);
+		world.addActor(this);
+		
+	}
+	
+	/**
+	 * Sets the mass of a dynamic actor. 
+	 * @param mass the mass
+	 */	
+	public void setMass(float mass) {
+		Functions.actorSetMass(id, mass);
+	}
+	/**
+	 * Retrieves the mass of the actor. 
+	 * @return
+	 */
+	public double getMass() {
+		return Functions.actorGetMass(id);
+	}
+	
+	public void setPosition(float x,float y,float z) {
+		Functions.actorSetPosition(id,x, y, z);
+	}
+	
+	public void setPosition(Vector3f vec) {
+		setPosition(vec.x,vec.y,vec.z);
+	}
+	
+	public void setLinearVelocity(float x,float y,float z) {
+		Functions.actorSetLinearVelocity(id,x, y, z);
+	}
+	public Vector3f getLinearVelocity() {
+		return new Vector3f(Functions.actorGetLinearVelocity(id));	
+	}
+	public void setAngularVelocity(float x,float y,float z) {
+		Functions.actorSetAngularVelocity(id,x, y, z);
+	}
+	public Vector3f getAngularVelocity() {
+		return new Vector3f(Functions.actorGetAngularVelocity(id));
+	}
+	public void setLinearDamping(float damping) {
+		Functions.actorSetLinearDamping(id,damping);
+	}
+	public float getLinearDamping() {
+		return Functions.actorGetLinearDamping(id);
+	}
+	public void setAngularDamping(float damping){
+		Functions.actorSetAngularDamping(id,damping);
+	}
+	public float getAngularDamping(){
+		return Functions.actorGetAngularDamping(id);
+	}
+	public void setLinearMomentum(float x,float y,float z) {
+		Functions.actorSetLinearMomentum(id,x,y,z);
+	}
+	public Vector3f getLinearMomentum() {
+		return new Vector3f(Functions.actorGetLinearMomentum(id));
+	}
+	public void setAngularMomentum(float x,float y,float z) {
+		Functions.actorSetAngularMomentum(id,x,y,z);
+	}
+	public Vector3f getAngularMomentum() {
+		return new Vector3f (Functions.actorGetAngularMomentum(id));
+	}
+	
+	public double computeKineticEnergy() {
+		return Functions.actorComputeKineticEnergy(id);
+	}
+	
+	
+	public Vector3f getPosition() {
+		return new Vector3f(Functions.actorGetPosition(id));
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+}
+	

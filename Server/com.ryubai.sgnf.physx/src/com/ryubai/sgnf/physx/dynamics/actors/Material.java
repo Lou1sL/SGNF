@@ -1,0 +1,65 @@
+package com.ryubai.sgnf.physx.dynamics.actors;
+
+import com.ryubai.sgnf.physx.Functions;
+import com.ryubai.sgnf.physx.WorldPhysX;
+
+public class Material {
+	int id;
+	static int id_counter;
+	
+	//material.dirOfAnisotropy.set(0,0,1);
+
+	public Material(int sid) {
+		super();
+		id = id_counter++;
+		Functions.materialCreateMaterial(sid,id);
+		//create 
+		
+	}
+	public Material(WorldPhysX world) {
+		this(world.getId());
+		
+	}
+	
+
+	public float getDynamicFriction() {
+		return 0;
+	}
+
+	public float getDynamicFrictionV() {
+		return 0;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public float getRestitution() {
+		return 0;
+	}
+
+	public float getStaticFriction() {
+		return 0; 
+	}
+
+	
+
+	
+
+	public void setDynamicFriction(float dynamicFriction) {
+		Functions.materialSetDynamicFriction(id, dynamicFriction);
+	}
+
+	
+
+	public void setRestitution(float restitution) {
+		Functions.materialRestitution(id, restitution);
+	}
+
+	public void setStaticFriction(float staticFriction) {
+		Functions.materialSetStaticFriction(id, staticFriction);
+	}
+
+	
+	
+}

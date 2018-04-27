@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints
+END
+TestJoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/TestJoint.java
+END
+Joint.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/Joint.java
+END
+FixedJoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/FixedJoint.java
+END
+RevoluteJointDesc.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/RevoluteJointDesc.java
+END
+RevoluteJoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/RevoluteJoint.java
+END
+D6JointDesc.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/D6JointDesc.java
+END
+D6Joint.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/D6Joint.java
+END
+JointDesc.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/JointDesc.java
+END
+FixedJointDesc.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/joints/FixedJointDesc.java
+END

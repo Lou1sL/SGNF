@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/actors
+END
+ActorNoShape.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/actors/ActorNoShape.java
+END
+GroundPlaneActor.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/actors/GroundPlaneActor.java
+END
+Actor.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/actors/Actor.java
+END
+ActorParameters.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/actors/ActorParameters.java
+END
+Material.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/actors/Material.java
+END
+SphereActor.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/actors/SphereActor.java
+END
+BoxActor.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/45/physx4java2/src/net/physx4java/dynamics/actors/BoxActor.java
+END

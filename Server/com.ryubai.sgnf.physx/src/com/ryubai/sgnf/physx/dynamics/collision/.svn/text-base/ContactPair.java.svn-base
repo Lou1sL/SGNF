@@ -1,0 +1,63 @@
+package net.physx4java.dynamics.collision;
+
+import javax.vecmath.Vector3f;
+
+import net.physx4java.WorldPhysX;
+import net.physx4java.dynamics.actors.Actor;
+
+public class ContactPair {
+	
+	private int flags;
+	private Vector3f sumNormalforce;
+	private Vector3f sumFrictionForce;
+	WorldPhysX world;
+	Actor actor1,actor2;
+	public Actor getActor1() {
+		return actor1;
+	}
+
+
+	public void setActor1(Actor actor1) {
+		this.actor1 = actor1;
+	}
+
+
+	public Actor getActor2() {
+		return actor2;
+	}
+
+
+	public void setActor2(Actor actor2) {
+		this.actor2 = actor2;
+	}
+
+
+	public String toString() {
+		
+		//
+		return actor1.getName()+"->"+actor2.getName();
+	}
+	
+	
+	public int getFlags() {
+		return flags;
+	}
+	public Vector3f getSumFrictionForce() {
+		return sumFrictionForce;
+	}
+	public Vector3f getSumNormalforce() {
+		return sumNormalforce;
+	}
+	
+
+	public void setFlags(int flags) {
+		this.flags = flags;
+	}
+	public void setSumFrictionForce(Vector3f sumFrictionForce) {
+		this.sumFrictionForce = sumFrictionForce;
+	}
+	public void setSumNormalforce(Vector3f sumNormalforce) {
+		this.sumNormalforce = sumNormalforce;
+	}
+	
+}

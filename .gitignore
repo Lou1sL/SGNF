@@ -1,6 +1,7 @@
-
 # Not uploading this one...
 /Ex/
+
+/Client/SGNFUnityTest2/
 
 # Third party libraries
 # /Server/lib/
@@ -9,9 +10,9 @@
 # Server Build
 /Server/com.ryubai.sgnf.infoserver/bin/
 /Server/com.ryubai.sgnf.scenarioserver/bin/
+/Server/com.ryubai.sgnf.physx/bin/
 /Server/com.ryubai.sgnfexample/bin/
 
-/Server/com.ryubai.sgnf.gameexample/
 
 # Client Build and some useless stuff...
 /Client/SGNFClient/.vs/
@@ -35,11 +36,6 @@
 /Client/SGNFUnityTest/.consulo/
 
 
-
-/Client/SGNFUnityTest2/
-
-
-
 *.unityproj
 *.suo
 *.tmp
@@ -56,7 +52,3 @@
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
-
-# Builds
-*.apk
-*.unitypackage

@@ -1,0 +1,54 @@
+package net.physx4java.demos.simple;
+
+import net.physx4java.WorldPhysX;
+import net.physx4java.dynamics.actors.Actor;
+import net.physx4java.dynamics.actors.ActorParameters;
+import net.physx4java.dynamics.actors.BoxActor;
+import net.physx4java.dynamics.actors.GroundPlaneActor;
+import net.physx4java.dynamics.actors.Material;
+import net.physx4java.dynamics.actors.SphereActor;
+
+public class SimpleActorDemo {
+	public static void main(String args[]) throws Exception {
+		//Create a new world
+		WorldPhysX world =  new WorldPhysX();
+		//set gravity
+		world.setGravity(0, -9, 0);
+		//create a groundplane
+		new GroundPlaneActor();
+		/*
+		 * create actors (a box and a sphere)
+		 */
+		ActorParameters params = new ActorParameters();
+		params.setDynamic(true);
+		params.setDensity(10f);
+		
+		Actor box = new BoxActor(params,0.5f,0.5f,0.5f);
+		Actor sphere = new SphereActor(params,0.5f);
+		//set mass of actors
+		box.setMass(1);
+		sphere.setMass(2);
+		//set actor position
+		box.setPosition(100, 1000, 100);
+		sphere.setPosition(100, 100, 10);
+		//assign material to box and sphere
+		Material material1 = new Material();
+		material1.setDynamicFriction(10);
+		box.setMaterial(material1);
+		sphere.setMaterial(material1);
+		//iterate the world
+		for(int i=0;i<90000;i++) {
+			//add force just for fun
+			sphere.addForce(100, 0, 0);
+			Thread.sleep(10);
+			material1.setDynamicFriction((float)(Math.random()*10f));
+			//step the world
+			world.step(0.01f);//set stepsize here
+			//print results
+			System.out.println("Position of objects : "+box.getPosition()+";"+sphere.getPosition());
+			System.out.println("Velocity ="+box.getLinearVelocity()+" "+sphere.getLinearVelocity());
+			System.out.println("Force ="+box.computeKineticEnergy()+" "+sphere.computeKineticEnergy());
+			//System.out.println("Rotation:\n "+box.getRotation()+";\n"+sphere.getRotation());
+		}
+	}
+}

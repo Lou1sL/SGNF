@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Projects/SGNF/Server/lib/physx/dll"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/physx/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/physx/lib/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/physx/lib/jorbis-0.0.15.jar"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/physx/lib/junit-4.1.jar"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/physx/lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/physx/lib/lwjgl_util_applet.jar"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/physx/lib/vecmath.jar"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Ex/jME3.2-stable/jMonkeyEngine3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,324 @@
+package com.ryubai.sgnf.physx.dynamics.joints;
+
+import com.ryubai.sgnf.physx.Functions;
+
+public class D6JointDesc extends JointDesc {
+	/**
+	 * Creates a new JointD6Desc
+	 * 
+	 */
+	public D6JointDesc() {
+		super();
+		Functions.jointDescD6Create(id);
+		// Functions.jointD6DescsetLinearDegreesOfFreedom(id,1,1,1);
+	}
+
+	/**
+	 * Define the linear degrees of freedom.
+	 * 
+	 * Default: NX_D6JOINT_MOTION_FREE
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : Yes PS3 : Yes XB360: Yes
+	 * 
+	 * @param motion_x
+	 * @param motion_y
+	 * @param motion_z
+	 */
+	public void setLinearDegreesOfFreedom(Functions.NxD6JointMotion motion_x,
+			Functions.NxD6JointMotion motion_y,
+			Functions.NxD6JointMotion motion_z) {
+		Functions.jointD6DescSetLinearDegreesOfFreedom(id, motion_x.getValue(),
+				motion_y.getValue(), motion_z.getValue());
+	}
+
+	/**
+	 * Define the angular degrees of freedom.
+	 * 
+	 * Default: NX_D6JOINT_MOTION_FREE
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : Yes PS3 : Yes XB360: Yes
+	 * 
+	 * @param twist
+	 * @param swing1
+	 * @param swing2
+	 */
+	public void setAngularDegreesOfFreedom(Functions.NxD6JointMotion twist,
+			Functions.NxD6JointMotion swing1,
+			Functions.NxD6JointMotion swing2) {
+		Functions.jointD6DescSetAngularDegreesOfFreedom(id,
+				twist.getValue(), swing1.getValue(), swing2.getValue());
+
+	}
+
+	/**
+	 * If some linear DOF are limited, linearLimit defines the characteristics
+	 * of these limits.
+	 * 
+	 * Range: See NxJointLimitSoftDesc Default: See NxJointLimitSoftDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : Yes PS3 : Yes XB360: Yes
+	 * 
+	 * @param value
+	 * @param restitution
+	 * @param spring
+	 * @param damping
+	 */
+	public void setLinearLimit(float value, float restitution, float spring,
+			float damping) {
+		Functions.jointD6DescSetLinearLimit(id, value, restitution, spring,
+				damping);
+	}
+
+	/**
+	 * If swing1Motion is NX_D6JOINT_MOTION_LIMITED, swing1Limit defines the
+	 * characteristics of the limit.
+	 * 
+	 * Range: See NxJointLimitSoftDesc Default: See NxJointLimitSoftDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : Yes PS3 : Yes XB360: Yes See also: NxJointLimitSoftDesc
+	 * linearLimit swing2Limit twistLimit
+	 * 
+	 * @param value
+	 * @param restitution
+	 * @param spring
+	 * @param damping
+	 */
+	public void setSwing1Limit(float value, float restitution, float spring,
+			float damping) {
+		Functions.jointD6DescSetSwing1Limit(id, value, restitution, spring,
+				damping);
+	}
+
+	/**
+	 * If swing2Motion is NX_D6JOINT_MOTION_LIMITED, swing2Limit defines the
+	 * characteristics of the limit.
+	 * 
+	 * Range: See NxJointLimitSoftDesc Default: See NxJointLimitSoftDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : Yes PS3 : Yes XB360: Yes
+	 * 
+	 * @param value
+	 * @param restitution
+	 * @param spring
+	 * @param damping
+	 */
+	public void setSwing2Limit(float value, float restitution, float spring,
+			float damping) {
+		Functions.jointD6DescSetSwing2Limit(id, value, restitution, spring,
+				damping);
+	}
+
+	/**
+	 * If twistMotion is NX_D6JOINT_MOTION_LIMITED, twistLimit defines the
+	 * characteristics of the limit.
+	 * 
+	 * Range: See NxJointLimitSoftPairDesc Default: See NxJointLimitSoftDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : Yes PS3 : Yes XB360: Yes
+	 * 
+	 * @param value
+	 * @param restitution
+	 * @param spring
+	 * @param damping
+	 */
+	public void setTwistLimit(float value, float restitution, float spring,
+			float damping) {
+		Functions.jointD6DescSetSwing1Limit(id, value, restitution, spring,
+				damping);
+	}
+
+	/**
+	 * Drive the three linear DOF.
+	 * 
+	 * Range: See NxJointDriveDesc Default: See NxJointDriveDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : No PS3 : Yes XB360: Yes
+	 * 
+	 * @param driveType
+	 * @param damping
+	 * @param forceLimit
+	 * @param spring
+	 */
+	public void setXDrive(Functions.NxD6JointDriveType driveType,
+			float damping, float forceLimit, float spring) {
+		Functions.jointD6DescSetXDrive(id, driveType.getValue(), damping,
+				forceLimit, spring);
+	}
+
+	/**
+	 * Drive the three linear DOF
+	 * 
+	 * Range: See NxJointDriveDesc Default: See NxJointDriveDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : No PS3 : Yes XB360: Yes
+	 * 
+	 * @param driveType
+	 * @param damping
+	 * @param forceLimit
+	 * @param spring
+	 */
+	public void setYDrive(Functions.NxD6JointDriveType driveType,
+			float damping, float forceLimit, float spring) {
+		Functions.jointD6DescSetYDrive(id, driveType.getValue(), damping,
+				forceLimit, spring);
+	}
+
+	/**
+	 * Drive the three linear DOF.
+	 * 
+	 * Range: See NxJointDriveDesc Default: See NxJointDriveDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : No PS3 : Yes XB360: Yes
+	 * 
+	 * @param driveType
+	 * @param damping
+	 * @param forceLimit
+	 * @param spring
+	 */
+	public void setZDrive(Functions.NxD6JointDriveType driveType,
+			float damping, float forceLimit, float spring) {
+		Functions.jointD6DescSetZDrive(id, driveType.getValue(), damping,
+				forceLimit, spring);
+	}
+
+	/**
+	 * These drives are used if the flag NX_D6JOINT_SLERP_DRIVE is not set.
+	 * 
+	 * Range: See NxJointDriveDesc Default: See NxJointDriveDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : Yes PS3 : Yes XB360: Yes
+	 * 
+	 * @param driveType
+	 * @param damping
+	 * @param forceLimit
+	 * @param spring
+	 */
+	public void setSwingDrive(Functions.NxD6JointDriveType driveType,
+			float damping, float forceLimit, float spring) {
+		Functions.jointD6DescSetSwingDrive(id, driveType.getValue(), damping,
+				forceLimit, spring);
+	}
+
+	/**
+	 * If twistMotion is NX_D6JOINT_MOTION_LIMITED, twistLimit defines the
+	 * characteristics of the limit.
+	 * 
+	 * Range: See NxJointLimitSoftPairDesc Default: See NxJointLimitSoftDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : Yes PS3 : Yes XB360: Yes
+	 * 
+	 * @param driveType
+	 * @param damping
+	 * @param forceLimit
+	 * @param spring
+	 */
+	public void setTwistDrive(Functions.NxD6JointDriveType driveType,
+			float damping, float forceLimit, float spring) {
+		Functions.jointD6DescSetTwistDrive(id, driveType.getValue(), damping,
+				forceLimit, spring);
+	}
+
+	/**
+	 * This drive is used if the flag NX_D6JOINT_SLERP_DRIVE is set.
+	 * 
+	 * Range: See NxJointDriveDesc Default: See NxJointDriveDesc
+	 * 
+	 * Platform:
+	 * 
+	 * PC SW: Yes PPU : No PS3 : Yes XB360: Yes
+	 * 
+	 * @param driveType
+	 * @param damping
+	 * @param forceLimit
+	 * @param spring
+	 */
+	public void setSlerpDrive(Functions.NxD6JointDriveType driveType,
+			float damping, float forceLimit, float spring) {
+		Functions.jointD6DescSetSlerpDrive(id, driveType.getValue(), damping,
+				forceLimit, spring);
+	}
+
+	
+
+	/**
+	 * If projectionMode is NX_JPM_NONE, projection is disabled. If
+	 * NX_JPM_POINT_MINDIST, bodies are projected to limits leaving an linear
+	 * error of projectionDistance and an angular error of projectionAngle.
+	 * Default: NX_JPM_NONE
+	 * 
+	 * @param driveType
+	 * @param mode
+	 */
+
+	public void setProjectionMode(Functions.NxD6JointDriveType driveType,
+			Functions.NxJointProjectionMode mode) {
+		Functions.jointD6DescSetProjectionMode(id, mode.getValue());
+	}
+
+	/**
+	 * The distance above which to project the joint. Range: (0,inf) Default:
+	 * 0.1
+	 * 
+	 * @param driveType
+	 * @param distance
+	 */
+	public void setProjectionDistance(Functions.NxD6JointDriveType driveType,
+			float distance) {
+		Functions.jointD6DescSetProjectionDistance(id, distance);
+	}
+
+	/**
+	 * The angle above which to project the joint. Range: (0,inf) Default:
+	 * 0.0872f (about 5 degrees in radians)
+	 * 
+	 * @param driveType
+	 * @param angle
+	 */
+	public void setProjectionAngle(Functions.NxD6JointDriveType driveType,
+			float angle) {
+		Functions.jointD6DescSetProjectionAngle(id, angle);
+	}
+
+	/**
+	 * when the flag NX_D6JOINT_GEAR_ENABLED is set, the angular velocity of the
+	 * second actor is driven towards the angular velocity of the first actor
+	 * times gearRatio (both w.r.t. their primary axis) Range: (-inf,inf)
+	 * Default: 1.0
+	 * 
+	 * @param gearRatio
+	 */
+	public void setGearRatio(float gearRatio) {
+		Functions.jointD6DescSetGearRatio(id, gearRatio);
+	}
+
+	/**
+	 * This is a combination of the bits defined by NxD6JointFlag. Default: 0
+	 * 
+	 * @param flag
+	 */
+	public void setFlags(int flag) {
+		Functions.jointD6DescSetFlags(id, flag);
+	}
+}

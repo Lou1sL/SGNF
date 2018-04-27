@@ -1,0 +1,94 @@
+package com.ryubai.sgnf.physx.demos.simple;
+
+import javax.vecmath.Matrix3f;
+import javax.vecmath.Vector3f;
+
+import com.ryubai.sgnf.physx.WorldPhysX;
+import com.ryubai.sgnf.physx.dynamics.actors.Actor;
+import com.ryubai.sgnf.physx.dynamics.actors.ActorParameters;
+import com.ryubai.sgnf.physx.dynamics.actors.BoxActor;
+import com.ryubai.sgnf.physx.dynamics.actors.GroundPlaneActor;
+import com.ryubai.sgnf.physx.dynamics.actors.Material;
+import com.ryubai.sgnf.physx.dynamics.actors.SphereActor;
+import com.ryubai.sgnf.physx.dynamics.joints.D6Joint;
+import com.ryubai.sgnf.physx.dynamics.joints.D6JointDesc;
+
+import sun.awt.GlobalCursorManager;
+
+
+public class SimpleJointDemo {
+	public static void main(String args[]) throws Exception {
+		
+		//Create a new world
+		WorldPhysX world =  new WorldPhysX();
+		//set gravity
+		world.setGravity(0, -9, 0);
+		//create a groundplane
+		new GroundPlaneActor(world,1f);
+		
+		Vector3f vec = new Vector3f();
+		float [] a = new float[10];
+		a[0]=1.5f;
+		Matrix3f m;
+	
+		//Functions.testArray(a);
+		
+		
+		System.out.println(a);
+		//if(2+2==4) return;
+		/*
+		 * create actors (a box and a sphere)
+		 */
+		ActorParameters params = new ActorParameters();
+		params.setDynamic(true);
+		params.setDensity(10f);
+		
+		Actor box = new BoxActor(params,world,0.5f,0.5f,0.5f);
+		Actor sphere = new SphereActor(params,world,0.5f);
+		//set mass of actors
+		box.setMass(1);
+		sphere.setMass(2);
+		//set actor position
+		box.setPosition(100, 1000, 100);
+		sphere.setPosition(100, 100, 10);
+		//assign material
+		Material material1 = new Material(1);
+		material1.setDynamicFriction(10);
+		box.setMaterial(material1);
+		sphere.setMaterial(material1);
+		/*
+		 * add joint
+		 */
+		D6JointDesc jd = new D6JointDesc();
+		jd.setActors(sphere, box);
+		
+		//jd.setLinearDegreesOfFreedom(Functions.NxD6JointMotion.NX_D6JOINT_MOTION_LOCKED,Functions.NxD6JointMotion.NX_D6JOINT_MOTION_LIMITED,Functions.NxD6JointMotion.NX_D6JOINT_MOTION_FREE);;
+		//jd.setAngularDegreesOfFreedom(Functions.NxD6JointMotion.NX_D6JOINT_MOTION_LOCKED,Functions.NxD6JointMotion.NX_D6JOINT_MOTION_LIMITED,Functions.NxD6JointMotion.NX_D6JOINT_MOTION_FREE);;		
+		jd.setGlobalAnchor(100f,100f,100f);
+		jd.setGlobalAxis(0f,1f,0f);
+		//set actors of jointdesc
+		D6Joint joint = new D6Joint(jd);
+		
+		//System.exit(0);
+		
+		
+		//iterate the world
+		for(int i=0;i<90000;i++) {
+			//step the world
+			//world.update(0.01f);
+			sphere.addForce(1000, 0, 0);
+			Thread.sleep(10);
+			material1.setDynamicFriction((float)(Math.random()*10f));
+			world.step(0.01f);
+			//print results
+			System.out.println("Position of objects : "+box.getPosition()+";"+sphere.getPosition());
+			//System.out.println("Velocity ="+box.getLinearVelocity()+" "+sphere.getLinearVelocity());
+			//System.out.println("Force ="+box.computeKineticEnergy()+" "+sphere.computeKineticEnergy());
+			//System.out.println("Rotation:\n "+box.getRotation()+";\n"+sphere.getRotation());
+			
+			
+		}
+		
+	}
+
+}

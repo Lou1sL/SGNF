@@ -1,0 +1,12 @@
+package net.physx4java.dynamics.actors;
+
+import net.physx4java.Functions;
+
+public class ActorNoShape extends Actor{
+
+	public ActorNoShape(ActorParameters parameters) {
+		super();
+		Functions.actorCreateAsNoShape(id, parameters.isDynamic(), parameters.isUseCCD());
+	}
+	
+}

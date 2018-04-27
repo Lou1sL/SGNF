@@ -1,0 +1,13 @@
+package net.physx4java.dynamics.actors;
+
+import net.physx4java.Functions;
+import net.physx4java.WorldPhysX;
+
+public class GroundPlaneActor extends Actor{
+
+	public GroundPlaneActor(WorldPhysX world,float den) {
+		super(world);
+		Functions.actorCreateAsGroundPlane(world.getId(),id,den);
+	}
+	
+}
