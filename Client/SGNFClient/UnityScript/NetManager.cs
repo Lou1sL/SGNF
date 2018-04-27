@@ -33,14 +33,15 @@ namespace SGNFClient.UnityScript
 
         private void OnDestroy()
         {
+            Disconnect();
             NeedDestroy = true;
         }
 
         private void OnApplicationQuit()
         {
+            Disconnect();
             NeedDestroy = true;
         }
-        //--------------------------
 
 
 
@@ -164,6 +165,7 @@ namespace SGNFClient.UnityScript
         {
             MessageCenter.Instance.setSSUpdater(frameUpdater);
         }
+        
     }
 
 

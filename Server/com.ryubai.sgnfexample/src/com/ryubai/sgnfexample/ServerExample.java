@@ -29,8 +29,8 @@ public class ServerExample {
 		public static String AID = "";
 		public static String BID = "";
 		
-		public static Vector playerA = new Vector();
-		public static Vector playerB = new Vector();
+		public static Vector playerA = new Vector(-1,-2f,0.5f,0f);
+		public static Vector playerB = new Vector(-1,2f,0.5f,0f);
 		
 		//以下是错误用法！！！因为protobuf在传输时会把null压缩没，导致List后面的部分错位
 		//public static Vector playerA = null;
@@ -127,7 +127,7 @@ public class ServerExample {
 		});
 
 		ss.setMaxConn(1024);
-		ss.setTick(60);
+		ss.setTick(20);
 		ss.setPort(ssinfo.get(0).Port);
 		ss.startThread();
 
