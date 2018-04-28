@@ -9,7 +9,7 @@ namespace SGNFClient
 {
     public static class SGNFUtils
     {
-
+        //插帧法
         public static Vector3 SmoothVec(Vector3 local, Vector3 newone)
         {
             if (!ISSocketManager.Instance.IsConnceted || !SSSocketManager.Instance.IsConnceted) return local;
@@ -20,14 +20,11 @@ namespace SGNFClient
             return local + (MessageCenter.Instance.timeFromLastTick / (1.0f / NetManager.Instance.Tick)) * dist;
         }
 
-
-
-
-        internal static float SmoothFloat(float local, float newone)
+        //预测法（一卡一卡的先不用）
+        public static Vector3 SmoothPredict(Vector3 position, Vector3 speed)
         {
-            if (MessageCenter.Instance.delatT >= 1.0f / NetManager.Instance.Tick) return newone;
-            float dist = newone - local;
-            return local + (MessageCenter.Instance.timeFromLastTick / (1.0f / NetManager.Instance.Tick)) * dist;
+            if (speed == Vector3.zero) return position;
+            return position + speed * MessageCenter.Instance.timeFromLastTick;
         }
 
 

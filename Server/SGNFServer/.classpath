@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/protostuff-collectionschema-1.0.8.jar"/>
 	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/protostuff-core-1.0.8.jar"/>
 	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/protostuff-runtime-1.0.8.jar"/>
+	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/connectionPool.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

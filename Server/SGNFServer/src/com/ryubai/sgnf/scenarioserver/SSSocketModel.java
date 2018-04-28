@@ -13,7 +13,7 @@ public class SSSocketModel {
 	//2333
 	public int currentTick;
 	public List<Integer> message = new ArrayList<Integer>();
-	public List<Vector> vector = new ArrayList<Vector>();
+	public List<NetVector> vector = new ArrayList<NetVector>();
 	
 	public SSSocketModel() {
 

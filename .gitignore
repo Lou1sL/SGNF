@@ -1,6 +1,5 @@
 # Not uploading this one...
 /Ex/
-
 /Client/SGNFUnityTest2/
 
 # Third party libraries
@@ -8,10 +7,9 @@
 # /Client/Lib/
 
 # Server Build
-/Server/com.ryubai.sgnf.infoserver/bin/
-/Server/com.ryubai.sgnf.scenarioserver/bin/
-/Server/com.ryubai.sgnf.physx/bin/
-/Server/com.ryubai.sgnfexample/bin/
+/Server/com.ryubai.sgnf.physx/
+/Server/SGNFServer/bin/
+/Server/SGNFServerTest/bin/
 
 
 # Client Build and some useless stuff...

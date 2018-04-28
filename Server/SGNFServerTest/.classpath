@@ -2,8 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ryubai.sgnf.infoserver"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.ryubai.sgnf.scenarioserver"/>
 	<classpathentry kind="lib" path="E:/Projects/SGNF/Server/lib/netty-all-4.1.22.Final.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SGNFServer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
