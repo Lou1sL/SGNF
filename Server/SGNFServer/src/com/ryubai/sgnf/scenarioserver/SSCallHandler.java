@@ -1,5 +1,9 @@
 package com.ryubai.sgnf.scenarioserver;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -11,16 +15,19 @@ import io.netty.handler.timeout.IdleStateEvent;
 public class SSCallHandler extends ChannelInboundHandlerAdapter {
 	
 	private int currentTick = 0;
+	Map<String,Channel> PlayerPool = new HashMap<String,Channel>();
 	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception // 当客户端连上服务器的时候会触发此函数
 	{
+		PlayerPool.put(ctx.channel().id().asLongText(), ctx.channel());
 		clientJoin(ctx.channel().id().asLongText());
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception// 当客户端断开连接的时候触发函数
 	{
+		PlayerPool.remove(ctx.channel().id().asLongText());
 		clientDrop(ctx.channel().id().asLongText());
 	}
 

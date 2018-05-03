@@ -12,6 +12,8 @@ public class SSSocketModel {
 	//不过就算开放世界类也不可能服务器连开414天吧？
 	//2333
 	public int currentTick;
+	
+	
 	public List<Integer> message = new ArrayList<Integer>();
 	public List<NetVector> vector = new ArrayList<NetVector>();
 	
