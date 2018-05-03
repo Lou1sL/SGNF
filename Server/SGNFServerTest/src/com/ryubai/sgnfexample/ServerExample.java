@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.ryubai.sgnf.dbmanager.*;
 import com.ryubai.sgnf.infoserver.*;
 import com.ryubai.sgnf.scenarioserver.*;
+import com.ryubai.sgnf.scenarioserver.UnityType.Vector3;
 
 public class ServerExample {
 
@@ -31,8 +32,8 @@ public class ServerExample {
 		public static String AID = "";
 		public static String BID = "";
 
-		public static NetVector playerA = new NetVector(-1, -2f, 0.5f, 0f);
-		public static NetVector playerB = new NetVector(-1, 2f, 0.5f, 0f);
+		public static Vector3 playerA = new Vector3(-2f, 0.5f, 0f);
+		public static Vector3 playerB = new Vector3(2f, 0.5f, 0f);
 
 		// 以下是错误用法！！！因为protobuf在传输时会把null压缩没，导致List后面的部分错位
 		// public static Vector playerA = null;
@@ -102,9 +103,9 @@ public class ServerExample {
 
 				sm.command = COMMAND_UPDATE_PLAYER;
 				if (id.equals(BattleField.AID))
-					sm.vector.add(BattleField.playerB);
+					sm.vector.add(new NetVector(-1,BattleField.playerB));
 				else if (id.equals(BattleField.BID))
-					sm.vector.add(BattleField.playerA);
+					sm.vector.add(new NetVector(-1,BattleField.playerA));
 				sm.vector.add(new NetVector());
 				return sm;
 			}
@@ -114,9 +115,9 @@ public class ServerExample {
 			public void tickRcv(String id, SSSocketModel message) {
 
 				if (id.equals(BattleField.AID))
-					BattleField.playerA = message.vector.get(0);
+					BattleField.playerA = message.vector.get(0).toVector3();
 				if (id.equals(BattleField.BID))
-					BattleField.playerB = message.vector.get(0);
+					BattleField.playerB = message.vector.get(0).toVector3();
 
 				// SSOUT.WriteConsole("x:"+message.vector.get(0).x+"
 				// z:"+message.vector.get(0).z);
@@ -151,6 +152,7 @@ public class ServerExample {
 		ss.setTick(60);
 		ss.setPort(ssinfo.get(0).Port);
 		ss.startThread();
+
 
 		while (true) {
 		}
