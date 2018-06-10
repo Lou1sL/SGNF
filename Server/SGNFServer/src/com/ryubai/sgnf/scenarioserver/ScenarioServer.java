@@ -2,6 +2,8 @@ package com.ryubai.sgnf.scenarioserver;
 
 import java.util.concurrent.TimeUnit;
 
+import com.ryubai.sgnf.infoserver.InfoServer._processThread;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -47,12 +49,13 @@ public class ScenarioServer {
 		}
 	}
 
-	_processThread th = new _processThread();
+	_processThread th;
 
 	public void startThread() {
 		if (!isRunning) {
 			SSOUT.WriteConsole("Starting thread");
 			isRunning = true;
+			th = new _processThread();
 			th.start();
 		} else
 			SSOUT.WriteConsole("Server is already running!");

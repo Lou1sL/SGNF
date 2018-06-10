@@ -54,4 +54,8 @@ public class Vector3 {
 		return Vector3.dot(v1, v2)/(Vector3.norm(v1)*Vector3.norm(v2));
 	}
 	
+	@Override
+	public String toString(){
+		return "X:"+x+" Y:"+y+" Z:"+z;
+	}
 }

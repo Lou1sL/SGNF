@@ -50,11 +50,12 @@ public class InfoServer {
         }
     }
 	
-	_processThread th = new _processThread();
+	_processThread th;
 	public void startThread(){
 		if(!isRunning){
 			ISOUT.WriteConsole("Starting thread");
         	isRunning = true;
+        	th = new _processThread();
         	th.start();
         }else ISOUT.WriteConsole("Server is already running!");
 	}

@@ -1,5 +1,6 @@
 package com.ryubai.sgnfexample;
 
+import java.awt.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class ServerExample {
 	private static int COMMAND_UPDATE_PLAYER = 0x1001;
 
 	// 模拟的战场
-	private static class BattleField {
+	public static class BattleField {
 		public static String AID = "";
 		public static String BID = "";
 
@@ -90,7 +91,7 @@ public class ServerExample {
 		// 配置服务器端口
 		is.setPort(9999);
 		// 如果是start()函数则是同步执行堵塞
-		is.startThread();
+		//is.startThread();
 
 		// 创建一个场景同步服务器
 		ScenarioServer ss = new ScenarioServer();
@@ -151,11 +152,12 @@ public class ServerExample {
 		// 设定帧率
 		ss.setTick(60);
 		ss.setPort(ssinfo.get(0).Port);
-		ss.startThread();
+		//ss.startThread();
 
 
-		while (true) {
-		}
+		new UIExample(is,ss).setBounds(500,500,400,500);
+
+
 	}
 
 }
