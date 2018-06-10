@@ -10,24 +10,24 @@ import com.ryubai.sgnf.scenarioserver.UnityType.Vector3;
 
 public class ServerExample {
 
-	// Ä£ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ö¸ï¿½ï¿½
+	// Ä£ÄâµÇÂ¼µÄÖ¸Áî
 	private static int COMMAND_TEST_LOGIN = 0x1000;
 
-	// Ä£ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// Ä£ÄâµÇÂ¼µÄÊý¾Ý
 	public static String UserName = "MyName";
 	public static String Pass = "12345678";
 
-	// ï¿½ï¿½ISï¿½ï¿½ï¿½Ãµï¿½SSï¿½ï¿½Ï¢
+	// ¸øISÅäÖÃµÄSSÐÅÏ¢
 	private static ArrayList<SSInfo> ssinfo = new ArrayList<SSInfo>() {
 		{
 			add(new SSInfo("ss0", "192.168.1.102", 9876));
 		}
 	};
 
-	// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ãµï¿½Ö¸ï¿½ï¿½
+	// Ä£Äâ¸üÐÂÍæ¼ÒÎ»ÖÃµÄÖ¸Áî
 	private static int COMMAND_UPDATE_PLAYER = 0x1001;
 
-	// Ä£ï¿½ï¿½ï¿½Õ½ï¿½ï¿½
+	// Ä£ÄâµÄÕ½³¡
 	private static class BattleField {
 		public static String AID = "";
 		public static String BID = "";
@@ -35,23 +35,23 @@ public class ServerExample {
 		public static Vector3 playerA = new Vector3(-2f, 0.5f, 0f);
 		public static Vector3 playerB = new Vector3(2f, 0.5f, 0f);
 
-		// ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªprotobufï¿½Ú´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½nullÑ¹ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Listï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½Ö´ï¿½Î»
+		// ÒÔÏÂÊÇ´íÎóÓÃ·¨£¡£¡£¡ÒòÎªprotobufÔÚ´«ÊäÊ±»á°ÑnullÑ¹ËõÃ»£¬µ¼ÖÂListºóÃæµÄ²¿·Ö´íÎ»
 		// public static Vector playerA = null;
 		// public static Vector playerB = null;
 	}
 
 	public static void main(String[] args) throws Exception {
 
-		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½Ó³ï¿½
+		// ´´½¨Êý¾Ý¿âÁ¬½Ó³Ø
 		new DBConnectionManager();
 		DBConnectionManager db = DBConnectionManager.getInstance();
-		Connection con = db.getConnection("db");// ï¿½ï¿½È¡Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½
+		Connection con = db.getConnection("db");// »ñÈ¡Ò»¸öÁ¬½Ó¶ÔÏó
 
-		// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½
+		// ´´½¨Ò»¸ö×ÊÁÏ·þÎñÆ÷
 		InfoServer is = new InfoServer();
 
 		is.setCallHandler(new ISCallHandler() {
-			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½
+			// ´¦Àí½ÓÊÕµÄÊý¾Ý
 			@Override
 			public void recieveMessage(String id, ISSocketModel message) {
 
@@ -66,37 +66,37 @@ public class ServerExample {
 					} else {
 						response.message.set(0, "NOPE!");
 					}
-					// ï¿½ï¿½ï¿½Ã¸Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					// µ÷ÓÃ¸Ãº¯Êý·¢ËÍÊý¾Ý
 					is.sendMessage(id, response);
 				}
 			}
 
-			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			// Íæ¼ÒÁ¬½Ó
 			@Override
 			public void clientJoin(String id) {
 				ISOUT.WriteConsole("Client join ID:" + id);
 			}
 
-			// ï¿½ï¿½Ò¶Ï¿ï¿½
+			// Íæ¼Ò¶Ï¿ª
 			@Override
 			public void clientDrop(String id) {
 				ISOUT.WriteConsole("Client drop ID:" + id);
 			}
 		});
-		// ï¿½ó¶¨³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// °ó¶¨³¡¾°·þÎñÆ÷
 		is.setSSInfo(ssinfo);
-		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// ÅäÖÃ×î´óÁ¬½ÓÊý
 		is.setMaxConn(1024);
-		// ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½
+		// ÅäÖÃ·þÎñÆ÷¶Ë¿Ú
 		is.setPort(9999);
-		// ï¿½ï¿½ï¿½ï¿½ï¿½start()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½Ö´ï¿½Ð¶ï¿½ï¿½ï¿½
+		// Èç¹ûÊÇstart()º¯ÊýÔòÊÇÍ¬²½Ö´ÐÐ¶ÂÈû
 		is.startThread();
 
-		// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// ´´½¨Ò»¸ö³¡¾°Í¬²½·þÎñÆ÷
 		ScenarioServer ss = new ScenarioServer();
 		ss.setCallHandler(new SSCallHandler() {
 
-			// Ã¿tickï¿½ï¿½ï¿½ï¿½
+			// Ã¿tick·¢ËÍ
 			@Override
 			public SSSocketModel tickSend(String id) {
 				SSSocketModel sm = new SSSocketModel();
@@ -110,7 +110,7 @@ public class ServerExample {
 				return sm;
 			}
 
-			// tickï¿½ï¿½ï¿½ï¿½
+			// tick½ÓÊÕ
 			@Override
 			public void tickRcv(String id, SSSocketModel message) {
 
@@ -123,7 +123,7 @@ public class ServerExample {
 				// z:"+message.vector.get(0).z);
 			}
 
-			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			// Íæ¼ÒÁ¬½Ó
 			@Override
 			public void clientJoin(String id) {
 				if (BattleField.AID.isEmpty())
@@ -134,7 +134,7 @@ public class ServerExample {
 				SSOUT.WriteConsole("Client join ID:" + id);
 			}
 
-			// ï¿½ï¿½Ò¶Ï¿ï¿½
+			// Íæ¼Ò¶Ï¿ª
 			@Override
 			public void clientDrop(String id) {
 				if (BattleField.AID.equals(id))
@@ -148,7 +148,7 @@ public class ServerExample {
 		});
 
 		ss.setMaxConn(1024);
-		// ï¿½è¶¨Ö¡ï¿½ï¿½
+		// Éè¶¨Ö¡ÂÊ
 		ss.setTick(60);
 		ss.setPort(ssinfo.get(0).Port);
 		ss.startThread();
