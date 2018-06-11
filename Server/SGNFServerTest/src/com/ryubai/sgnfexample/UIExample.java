@@ -24,8 +24,8 @@ public class UIExample  extends JFrame
 	JButton startSS = new JButton("Æô¶¯SS");
 	JButton stopSS = new JButton("Í£Ö¹SS");
 	
-	JTextField IsPort = new JTextField(20);
-	JTextField SsPort = new JTextField(20);
+	JTextField IsPort = new JTextField(10);
+	JTextField SsPort = new JTextField(10);
 	
 	UIExample(InfoServer is,ScenarioServer ss)
 	{
@@ -64,8 +64,8 @@ public class UIExample  extends JFrame
 			public void run() {
 				while (true) {
 					try {
-						apl.setText(ServerExample.BattleField.playerA.toString());
-						bpl.setText(ServerExample.BattleField.playerB.toString());
+						apl.setText("Player A Position: "+ServerExample.BattleField.playerA.toString());
+						bpl.setText("Player B Position: "+ServerExample.BattleField.playerB.toString());
 						Thread.sleep(10);
 					} catch (Exception e) {
 					}
