@@ -16,10 +16,8 @@ import io.netty.handler.timeout.IdleStateHandler;
 
 public class ScenarioServer {
 
-	private SSCallHandler callHandler = new SSCallHandler();
+	private SSCallHandler callHandler = null;
 
-	
-	
 	static int tick = 60;
 	private int maxConn = 1024;
 	private int port = 34456;
@@ -60,7 +58,6 @@ public class ScenarioServer {
 		} else
 			SSOUT.WriteConsole("Server is already running!");
 	}
-
 	@SuppressWarnings("deprecation")
 	public void shut() {
 		if (isRunning) {

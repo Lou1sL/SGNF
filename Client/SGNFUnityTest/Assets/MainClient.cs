@@ -64,6 +64,6 @@ public class MainClient : MonoBehaviour
     
     private void Update()
     {
-        ping.text = "PING "+ NetManager.Instance.Latency + "";
+        ping.text = "Lat: "+ NetManager.Instance.Latency + "";
     }
 }
