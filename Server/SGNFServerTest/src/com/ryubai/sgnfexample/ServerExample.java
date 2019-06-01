@@ -21,7 +21,7 @@ public class ServerExample {
 	// 给IS配置的SS信息
 	private static ArrayList<SSInfo> ssinfo = new ArrayList<SSInfo>() {
 		{
-			add(new SSInfo("ss0", "192.168.1.102", 9876));
+			add(new SSInfo("ss0", "127.0.0.1", 9876));
 		}
 	};
 
